@@ -36,8 +36,4 @@ public class AppModel {
     private Date created = new Date();
     private Date updated = new Date();
 
-
-    //应用监控的key 用来保存所有的key 如果没有的话就新建一个
-    private Set<String> keyList;
-
 }

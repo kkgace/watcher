@@ -9,10 +9,13 @@ import com.baixing.monitor.model.DashModel;
 import com.baixing.monitor.model.AppModel;
 import com.baixing.monitor.service.DashService;
 import com.baixing.monitor.util.FileUtil;
+import com.sun.tools.javac.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -30,14 +33,18 @@ public class DashServiceImpl implements DashService {
     private String dashStr;
     private String rowStr;
     private String panelStr;
+    private String linkStr;
 
     @PostConstruct
     public void init() {
         dashStr = FileUtil.getFileToJson("dashboard.json");
         rowStr = FileUtil.getFileToJson("row.json");
         panelStr = FileUtil.getFileToJson("panel.json");
+        linkStr = FileUtil.getFileToJson("link.json");
     }
 
+
+    private static final String REFRUSH_URL = "http://localhost:10933/refresh?orgId=%s&appName=%s";
 
     /**
      * 每个dashboard是一个应用,每个应用只建一行（后面有需要再扩充）  每行建立多个panel
@@ -49,10 +56,16 @@ public class DashServiceImpl implements DashService {
     @Override
     public int addDashboard(AppModel appModel) {
         JSONArray rows = new JSONArray();
+        JSONArray links = new JSONArray();
 
         JSONObject dashJson = JSON.parseObject(dashStr);
         dashJson.put("title", appModel.getName());
         dashJson.put("description", appModel.getDescr());
+
+
+        JSONObject linkJson = JSON.parseObject(linkStr);
+        linkJson.put("url", String.format(REFRUSH_URL, appModel.getOrgId(), appModel.getName()));
+        links.add(linkJson);
 
         JSONObject row1 = JSON.parseObject(rowStr);
         row1.put("title", appModel.getName());
@@ -60,6 +73,8 @@ public class DashServiceImpl implements DashService {
         //添加一行
         rows.add(row1);
         dashJson.put("rows", rows);
+        dashJson.put("links", links);
+
 
         DashModel dashboard = new DashModel();
         dashboard.setVersion(0);
@@ -68,9 +83,9 @@ public class DashServiceImpl implements DashService {
         dashboard.setData(dashJson.toString());
         dashboard.setOrgId(appModel.getOrgId());
 
-        dashMapper.insertADashboard(dashboard);
+        int result = dashMapper.insertADashboard(dashboard);
 
-        return 0;
+        return result;
     }
 
 
@@ -102,13 +117,12 @@ public class DashServiceImpl implements DashService {
             //添加一个图
             panels.add(panel);
         }
-
         row.put("panels", panels);
 
 
-        dashMapper.updateDataById(data.toString(), dashboard.getId());
+        int result = dashMapper.updateDataById(data.toString(), dashboard.getId());
 
-        return 0;
+        return result;
     }
 
     @Override
@@ -124,11 +138,20 @@ public class DashServiceImpl implements DashService {
     @Override
     public int refreshDashboard(String orgId, String appName) {
 
-        Set<String> keySet = influxdbDao.getAllKeyField(orgId, appName);
 
-        addDashPanel(keySet, Integer.parseInt(orgId), appName);
+        Pair<String, String> key = new Pair<>(orgId, appName);
+        Set<String> keySet = monitorKeyMap.get(key);
+        System.out.println(keySet);
+        int result = addDashPanel(keySet, Integer.parseInt(orgId), appName);
 
-        return 0;
+        return result;
+    }
+
+    private static Map<Pair<String, String>, Set<String>> monitorKeyMap = new HashMap<>();
+
+    public static void refrushMap(String orgId, String appName, Set<String> keySet) {
+        Pair<String, String> key = new Pair<>(orgId, appName);
+        monitorKeyMap.put(key, keySet);
     }
 
 }

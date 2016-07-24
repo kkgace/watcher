@@ -4,12 +4,15 @@ import com.baixing.monitor.model.AppModel;
 import com.baixing.monitor.model.ResponseModel;
 import com.baixing.monitor.service.AppService;
 import com.baixing.monitor.service.DashService;
+import com.baixing.monitor.util.BXMonitor;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * Created by kofee on 16/7/23.
@@ -64,5 +67,25 @@ public class WebController {
 
         int result = dashService.refreshDashboard(orgId, appName);
         return null;
+    }
+
+
+
+
+    //
+    @RequestMapping(value = "/healthcheck")
+    public String healthCheck() {
+        return "hello 世界";
+    }
+
+    @RequestMapping(value = "/monitor")
+    public String monitor() {
+        StringBuilder out = new StringBuilder();
+        for (Map.Entry<String, Long> entry : BXMonitor.getValues().entrySet()) {
+            String name = entry.getKey();
+            Number value = entry.getValue();
+            out.append(name + "=" + value + "\n");
+        }
+        return out.toString();
     }
 }

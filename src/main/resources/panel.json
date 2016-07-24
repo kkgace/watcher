@@ -14,7 +14,7 @@
   },
   "hideTimeOverride": false,
   "id": 1,
-  "interval": "\u003e60s",
+  "interval": "\u003e30s",
   "isNew": true,
   "legend": {
     "alignAsTable": true,
@@ -68,13 +68,23 @@
         [
           {
             "params": [
-              "panel_key"
+              "value"
             ],
             "type": "field"
+          },
+          {
+            "params": [],
+            "type": "mean"
           }
         ]
       ],
-      "tags": []
+      "tags": [
+        {
+          "key": "monitor_key",
+          "operator": "=",
+          "value": "panel_key"
+        }
+      ]
     }
   ],
   "timeFrom": null,

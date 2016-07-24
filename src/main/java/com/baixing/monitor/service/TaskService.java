@@ -2,6 +2,7 @@ package com.baixing.monitor.service;
 
 import com.baixing.monitor.mapper.DashMapper;
 import com.baixing.monitor.model.AppModel;
+import com.baixing.monitor.util.BXMonitor;
 import com.google.common.base.Splitter;
 import com.sun.tools.javac.util.Pair;
 import org.slf4j.Logger;
@@ -22,7 +23,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.baixing.monitor.util.HttpUtil.httpGet;
 
 /**
  * Created by kofee on 16/7/20.
@@ -59,7 +59,7 @@ public class TaskService implements SchedulingConfigurer {
     private ExecutorService executor = Executors.newFixedThreadPool(5);
 
     //每30秒执行一次
-    //@Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 30000)
     public void runMonitorServer() {
 
         logger.info("开始拉监控数据, 应用数量={}", serverMap.size());
@@ -77,7 +77,8 @@ public class TaskService implements SchedulingConfigurer {
                 executor.submit(new GetAndWritePoints(orgId, name, host));
             }
         }
-        logger.info("结束一次拉取,话费总时间={}", System.currentTimeMillis() - begin);
+        logger.info("结束一次拉取,花费总时间={}", System.currentTimeMillis() - begin);
+        BXMonitor.recordOne("启动一次拉取监控", System.currentTimeMillis() - begin);
 
     }
 

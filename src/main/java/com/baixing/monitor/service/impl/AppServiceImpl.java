@@ -1,11 +1,11 @@
 package com.baixing.monitor.service.impl;
 
 import com.baixing.monitor.mapper.AppMapper;
-import com.baixing.monitor.mapper.DashMapper;
 import com.baixing.monitor.model.AppModel;
 import com.baixing.monitor.service.AppService;
 import com.baixing.monitor.service.DashService;
 import com.baixing.monitor.service.TaskService;
+import com.baixing.monitor.util.BXMonitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -26,6 +26,7 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public int registerApp(AppModel appModel) {
+        long begin = System.currentTimeMillis();
 
         try {
             //先在app表中将应用的信息插入
@@ -40,8 +41,11 @@ public class AppServiceImpl implements AppService {
                     TaskService.addServerMap(appModel);
                 }
             }
+
+            BXMonitor.recordOne("注册应用", System.currentTimeMillis() - begin);
             return result;
         } catch (DuplicateKeyException e) {
+            BXMonitor.recordOne("注册应用失败", System.currentTimeMillis() - begin);
             return -1;
         }
     }
@@ -53,7 +57,9 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public List<AppModel> getAllApp() {
+        long begin = System.currentTimeMillis();
         List<AppModel> appModelList = appMapper.getAllApp();
+        BXMonitor.recordOne("get_all_app", System.currentTimeMillis() - begin);
         return appModelList;
     }
 

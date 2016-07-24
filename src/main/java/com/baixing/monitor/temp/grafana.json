@@ -1,57 +1,75 @@
 {
+  "hideControls": true,
+  "schemaVersion": 12,
+  "editable": false,
+  "sharedCrosshair": false,
+  "timezone": "browser",
   "annotations": {
     "list": []
   },
-  "editable": true,
-  "gnetId": null,
-  "hideControls": false,
-  "id": 6,
-  "links": [],
+  "description": "监控应用后台",
   "rows": [
     {
-      "collapse": false,
-      "editable": true,
-      "height": "250px",
+      "editable": false,
       "panels": [
         {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 1,
-          "isNew": true,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
           "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 12,
           "stack": false,
-          "steppedLine": false,
+          "legend": {
+            "current": true,
+            "total": true,
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "values": true,
+            "show": true,
+            "hideEmpty": false,
+            "rightSide": false,
+            "hideZero": false
+          },
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "cumulative",
+            "sort": 0
+          },
+          "yaxes": [
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": true,
+              "label": ""
+            },
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": false
+            }
+          ],
+          "error": false,
+          "title": "influxdb_write_points_Count",
+          "type": "graph",
+          "seriesOverrides": [],
           "targets": [
             {
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "resultFormat": "time_series",
               "dsType": "influxdb",
+              "alias": "influxdb_write_points_Count",
               "groupBy": [
                 {
                   "params": [
@@ -66,17 +84,92 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "yaoguang-push",
-              "policy": "default",
-              "query": "SELECT mean(\"JVM_PS_MarkSweep_Count\") FROM \"yaoguang-push\" WHERE \"machine\" = 'storm02' AND $timeFilter GROUP BY time($interval) fill(null)",
-              "rawQuery": true,
               "refId": "A",
-              "resultFormat": "time_series",
+              "measurement": "monitor_app",
+              "policy": "default",
+              "rawQuery": false,
+              "tags": [
+                {
+                  "value": "influxdb_write_points_Count",
+                  "key": "monitor_key",
+                  "operator": "="
+                }
+              ]
+            }
+          ],
+          "transparent": false,
+          "points": false,
+          "xaxis": {
+            "show": true
+          },
+          "percentage": false,
+          "links": [],
+          "id": 1,
+          "lines": true,
+          "editable": false,
+          "nullPointMode": "null",
+          "steppedLine": false,
+          "isNew": true,
+          "fill": 1,
+          "linewidth": 2,
+          "bars": false,
+          "grid": {
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "threshold1Color": "rgba(216, 200, 27, 0.27)"
+          },
+          "aliasColors": {},
+          "decimals": 0,
+          "hideTimeOverride": false,
+          "pointradius": 5,
+          "interval": ">30s",
+          "span": 6
+        },
+        {
+          "renderer": "flot",
+          "stack": false,
+          "legend": {
+            "current": true,
+            "total": true,
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "values": true,
+            "show": true,
+            "hideEmpty": false,
+            "rightSide": false,
+            "hideZero": false
+          },
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "cumulative",
+            "sort": 0
+          },
+          "yaxes": [
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": true,
+              "label": ""
+            },
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": false
+            }
+          ],
+          "error": false,
+          "title": "抓取监控数据成功_Count",
+          "type": "graph",
+          "seriesOverrides": [],
+          "targets": [
+            {
               "select": [
                 [
                   {
                     "params": [
-                      "JVM_PS_MarkSweep_Count"
+                      "value"
                     ],
                     "type": "field"
                   },
@@ -86,70 +179,1544 @@
                   }
                 ]
               ],
+              "resultFormat": "time_series",
+              "dsType": "influxdb",
+              "alias": "抓取监控数据成功_Count",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "null"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "refId": "A",
+              "measurement": "monitor_app",
+              "policy": "default",
+              "rawQuery": false,
               "tags": [
                 {
-                  "key": "machine",
-                  "operator": "=",
-                  "value": "storm02"
+                  "value": "抓取监控数据成功_Count",
+                  "key": "monitor_key",
+                  "operator": "="
                 }
               ]
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Panel Title",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "cumulative"
-          },
-          "type": "graph",
+          "transparent": false,
+          "points": false,
           "xaxis": {
             "show": true
           },
+          "percentage": false,
+          "links": [],
+          "id": 2,
+          "lines": true,
+          "editable": false,
+          "nullPointMode": "null",
+          "steppedLine": false,
+          "isNew": true,
+          "fill": 1,
+          "linewidth": 2,
+          "bars": false,
+          "grid": {
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "threshold1Color": "rgba(216, 200, 27, 0.27)"
+          },
+          "aliasColors": {},
+          "decimals": 0,
+          "hideTimeOverride": false,
+          "pointradius": 5,
+          "interval": ">30s",
+          "span": 6
+        },
+        {
+          "renderer": "flot",
+          "stack": false,
+          "legend": {
+            "current": true,
+            "total": true,
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "values": true,
+            "show": true,
+            "hideEmpty": false,
+            "rightSide": false,
+            "hideZero": false
+          },
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "cumulative",
+            "sort": 0
+          },
           "yaxes": [
             {
-              "format": "short",
-              "label": null,
               "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
+              "format": "short",
+              "show": true,
+              "label": ""
             },
             {
-              "format": "short",
-              "label": null,
               "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
+              "format": "short",
+              "show": false
             }
-          ]
+          ],
+          "error": false,
+          "title": "JVM_Thread_Count",
+          "type": "graph",
+          "seriesOverrides": [],
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "resultFormat": "time_series",
+              "dsType": "influxdb",
+              "alias": "JVM_Thread_Count",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "null"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "refId": "A",
+              "measurement": "monitor_app",
+              "policy": "default",
+              "rawQuery": false,
+              "tags": [
+                {
+                  "value": "JVM_Thread_Count",
+                  "key": "monitor_key",
+                  "operator": "="
+                }
+              ]
+            }
+          ],
+          "transparent": false,
+          "points": false,
+          "xaxis": {
+            "show": true
+          },
+          "percentage": false,
+          "links": [],
+          "id": 3,
+          "lines": true,
+          "editable": false,
+          "nullPointMode": "null",
+          "steppedLine": false,
+          "isNew": true,
+          "fill": 1,
+          "linewidth": 2,
+          "bars": false,
+          "grid": {
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "threshold1Color": "rgba(216, 200, 27, 0.27)"
+          },
+          "aliasColors": {},
+          "decimals": 0,
+          "hideTimeOverride": false,
+          "pointradius": 5,
+          "interval": ">30s",
+          "span": 6
+        },
+        {
+          "renderer": "flot",
+          "stack": false,
+          "legend": {
+            "current": true,
+            "total": true,
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "values": true,
+            "show": true,
+            "hideEmpty": false,
+            "rightSide": false,
+            "hideZero": false
+          },
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "cumulative",
+            "sort": 0
+          },
+          "yaxes": [
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": true,
+              "label": ""
+            },
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": false
+            }
+          ],
+          "error": false,
+          "title": "context_null_Time",
+          "type": "graph",
+          "seriesOverrides": [],
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "resultFormat": "time_series",
+              "dsType": "influxdb",
+              "alias": "context_null_Time",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "null"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "refId": "A",
+              "measurement": "monitor_app",
+              "policy": "default",
+              "rawQuery": false,
+              "tags": [
+                {
+                  "value": "context_null_Time",
+                  "key": "monitor_key",
+                  "operator": "="
+                }
+              ]
+            }
+          ],
+          "transparent": false,
+          "points": false,
+          "xaxis": {
+            "show": true
+          },
+          "percentage": false,
+          "links": [],
+          "id": 4,
+          "lines": true,
+          "editable": false,
+          "nullPointMode": "null",
+          "steppedLine": false,
+          "isNew": true,
+          "fill": 1,
+          "linewidth": 2,
+          "bars": false,
+          "grid": {
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "threshold1Color": "rgba(216, 200, 27, 0.27)"
+          },
+          "aliasColors": {},
+          "decimals": 0,
+          "hideTimeOverride": false,
+          "pointradius": 5,
+          "interval": ">30s",
+          "span": 6
+        },
+        {
+          "renderer": "flot",
+          "stack": false,
+          "legend": {
+            "current": true,
+            "total": true,
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "values": true,
+            "show": true,
+            "hideEmpty": false,
+            "rightSide": false,
+            "hideZero": false
+          },
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "cumulative",
+            "sort": 0
+          },
+          "yaxes": [
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": true,
+              "label": ""
+            },
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": false
+            }
+          ],
+          "error": false,
+          "title": "JVM_PS_MarkSweep_Count",
+          "type": "graph",
+          "seriesOverrides": [],
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "resultFormat": "time_series",
+              "dsType": "influxdb",
+              "alias": "JVM_PS_MarkSweep_Count",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "null"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "refId": "A",
+              "measurement": "monitor_app",
+              "policy": "default",
+              "rawQuery": false,
+              "tags": [
+                {
+                  "value": "JVM_PS_MarkSweep_Count",
+                  "key": "monitor_key",
+                  "operator": "="
+                }
+              ]
+            }
+          ],
+          "transparent": false,
+          "points": false,
+          "xaxis": {
+            "show": true
+          },
+          "percentage": false,
+          "links": [],
+          "id": 5,
+          "lines": true,
+          "editable": false,
+          "nullPointMode": "null",
+          "steppedLine": false,
+          "isNew": true,
+          "fill": 1,
+          "linewidth": 2,
+          "bars": false,
+          "grid": {
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "threshold1Color": "rgba(216, 200, 27, 0.27)"
+          },
+          "aliasColors": {},
+          "decimals": 0,
+          "hideTimeOverride": false,
+          "pointradius": 5,
+          "interval": ">30s",
+          "span": 6
+        },
+        {
+          "renderer": "flot",
+          "stack": false,
+          "legend": {
+            "current": true,
+            "total": true,
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "values": true,
+            "show": true,
+            "hideEmpty": false,
+            "rightSide": false,
+            "hideZero": false
+          },
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "cumulative",
+            "sort": 0
+          },
+          "yaxes": [
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": true,
+              "label": ""
+            },
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": false
+            }
+          ],
+          "error": false,
+          "title": "http_get_Time",
+          "type": "graph",
+          "seriesOverrides": [],
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "resultFormat": "time_series",
+              "dsType": "influxdb",
+              "alias": "http_get_Time",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "null"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "refId": "A",
+              "measurement": "monitor_app",
+              "policy": "default",
+              "rawQuery": false,
+              "tags": [
+                {
+                  "value": "http_get_Time",
+                  "key": "monitor_key",
+                  "operator": "="
+                }
+              ]
+            }
+          ],
+          "transparent": false,
+          "points": false,
+          "xaxis": {
+            "show": true
+          },
+          "percentage": false,
+          "links": [],
+          "id": 6,
+          "lines": true,
+          "editable": false,
+          "nullPointMode": "null",
+          "steppedLine": false,
+          "isNew": true,
+          "fill": 1,
+          "linewidth": 2,
+          "bars": false,
+          "grid": {
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "threshold1Color": "rgba(216, 200, 27, 0.27)"
+          },
+          "aliasColors": {},
+          "decimals": 0,
+          "hideTimeOverride": false,
+          "pointradius": 5,
+          "interval": ">30s",
+          "span": 6
+        },
+        {
+          "renderer": "flot",
+          "stack": false,
+          "legend": {
+            "current": true,
+            "total": true,
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "values": true,
+            "show": true,
+            "hideEmpty": false,
+            "rightSide": false,
+            "hideZero": false
+          },
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "cumulative",
+            "sort": 0
+          },
+          "yaxes": [
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": true,
+              "label": ""
+            },
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": false
+            }
+          ],
+          "error": false,
+          "title": "get_all_app_Time",
+          "type": "graph",
+          "seriesOverrides": [],
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "resultFormat": "time_series",
+              "dsType": "influxdb",
+              "alias": "get_all_app_Time",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "null"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "refId": "A",
+              "measurement": "monitor_app",
+              "policy": "default",
+              "rawQuery": false,
+              "tags": [
+                {
+                  "value": "get_all_app_Time",
+                  "key": "monitor_key",
+                  "operator": "="
+                }
+              ]
+            }
+          ],
+          "transparent": false,
+          "points": false,
+          "xaxis": {
+            "show": true
+          },
+          "percentage": false,
+          "links": [],
+          "id": 7,
+          "lines": true,
+          "editable": false,
+          "nullPointMode": "null",
+          "steppedLine": false,
+          "isNew": true,
+          "fill": 1,
+          "linewidth": 2,
+          "bars": false,
+          "grid": {
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "threshold1Color": "rgba(216, 200, 27, 0.27)"
+          },
+          "aliasColors": {},
+          "decimals": 0,
+          "hideTimeOverride": false,
+          "pointradius": 5,
+          "interval": ">30s",
+          "span": 6
+        },
+        {
+          "renderer": "flot",
+          "stack": false,
+          "legend": {
+            "current": true,
+            "total": true,
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "values": true,
+            "show": true,
+            "hideEmpty": false,
+            "rightSide": false,
+            "hideZero": false
+          },
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "cumulative",
+            "sort": 0
+          },
+          "yaxes": [
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": true,
+              "label": ""
+            },
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": false
+            }
+          ],
+          "error": false,
+          "title": "context_null_Count",
+          "type": "graph",
+          "seriesOverrides": [],
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "resultFormat": "time_series",
+              "dsType": "influxdb",
+              "alias": "context_null_Count",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "null"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "refId": "A",
+              "measurement": "monitor_app",
+              "policy": "default",
+              "rawQuery": false,
+              "tags": [
+                {
+                  "value": "context_null_Count",
+                  "key": "monitor_key",
+                  "operator": "="
+                }
+              ]
+            }
+          ],
+          "transparent": false,
+          "points": false,
+          "xaxis": {
+            "show": true
+          },
+          "percentage": false,
+          "links": [],
+          "id": 8,
+          "lines": true,
+          "editable": false,
+          "nullPointMode": "null",
+          "steppedLine": false,
+          "isNew": true,
+          "fill": 1,
+          "linewidth": 2,
+          "bars": false,
+          "grid": {
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "threshold1Color": "rgba(216, 200, 27, 0.27)"
+          },
+          "aliasColors": {},
+          "decimals": 0,
+          "hideTimeOverride": false,
+          "pointradius": 5,
+          "interval": ">30s",
+          "span": 6
+        },
+        {
+          "renderer": "flot",
+          "stack": false,
+          "legend": {
+            "current": true,
+            "total": true,
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "values": true,
+            "show": true,
+            "hideEmpty": false,
+            "rightSide": false,
+            "hideZero": false
+          },
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "cumulative",
+            "sort": 0
+          },
+          "yaxes": [
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": true,
+              "label": ""
+            },
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": false
+            }
+          ],
+          "error": false,
+          "title": "influxdb_write_points_Time",
+          "type": "graph",
+          "seriesOverrides": [],
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "resultFormat": "time_series",
+              "dsType": "influxdb",
+              "alias": "influxdb_write_points_Time",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "null"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "refId": "A",
+              "measurement": "monitor_app",
+              "policy": "default",
+              "rawQuery": false,
+              "tags": [
+                {
+                  "value": "influxdb_write_points_Time",
+                  "key": "monitor_key",
+                  "operator": "="
+                }
+              ]
+            }
+          ],
+          "transparent": false,
+          "points": false,
+          "xaxis": {
+            "show": true
+          },
+          "percentage": false,
+          "links": [],
+          "id": 9,
+          "lines": true,
+          "editable": false,
+          "nullPointMode": "null",
+          "steppedLine": false,
+          "isNew": true,
+          "fill": 1,
+          "linewidth": 2,
+          "bars": false,
+          "grid": {
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "threshold1Color": "rgba(216, 200, 27, 0.27)"
+          },
+          "aliasColors": {},
+          "decimals": 0,
+          "hideTimeOverride": false,
+          "pointradius": 5,
+          "interval": ">30s",
+          "span": 6
+        },
+        {
+          "renderer": "flot",
+          "stack": false,
+          "legend": {
+            "current": true,
+            "total": true,
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "values": true,
+            "show": true,
+            "hideEmpty": false,
+            "rightSide": false,
+            "hideZero": false
+          },
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "cumulative",
+            "sort": 0
+          },
+          "yaxes": [
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": true,
+              "label": ""
+            },
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": false
+            }
+          ],
+          "error": false,
+          "title": "启动一次拉取监控_Time",
+          "type": "graph",
+          "seriesOverrides": [],
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "resultFormat": "time_series",
+              "dsType": "influxdb",
+              "alias": "启动一次拉取监控_Time",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "null"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "refId": "A",
+              "measurement": "monitor_app",
+              "policy": "default",
+              "rawQuery": false,
+              "tags": [
+                {
+                  "value": "启动一次拉取监控_Time",
+                  "key": "monitor_key",
+                  "operator": "="
+                }
+              ]
+            }
+          ],
+          "transparent": false,
+          "points": false,
+          "xaxis": {
+            "show": true
+          },
+          "percentage": false,
+          "links": [],
+          "id": 10,
+          "lines": true,
+          "editable": false,
+          "nullPointMode": "null",
+          "steppedLine": false,
+          "isNew": true,
+          "fill": 1,
+          "linewidth": 2,
+          "bars": false,
+          "grid": {
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "threshold1Color": "rgba(216, 200, 27, 0.27)"
+          },
+          "aliasColors": {},
+          "decimals": 0,
+          "hideTimeOverride": false,
+          "pointradius": 5,
+          "interval": ">30s",
+          "span": 6
+        },
+        {
+          "renderer": "flot",
+          "stack": false,
+          "legend": {
+            "current": true,
+            "total": true,
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "values": true,
+            "show": true,
+            "hideEmpty": false,
+            "rightSide": false,
+            "hideZero": false
+          },
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "cumulative",
+            "sort": 0
+          },
+          "yaxes": [
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": true,
+              "label": ""
+            },
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": false
+            }
+          ],
+          "error": false,
+          "title": "get_all_app_Count",
+          "type": "graph",
+          "seriesOverrides": [],
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "resultFormat": "time_series",
+              "dsType": "influxdb",
+              "alias": "get_all_app_Count",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "null"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "refId": "A",
+              "measurement": "monitor_app",
+              "policy": "default",
+              "rawQuery": false,
+              "tags": [
+                {
+                  "value": "get_all_app_Count",
+                  "key": "monitor_key",
+                  "operator": "="
+                }
+              ]
+            }
+          ],
+          "transparent": false,
+          "points": false,
+          "xaxis": {
+            "show": true
+          },
+          "percentage": false,
+          "links": [],
+          "id": 11,
+          "lines": true,
+          "editable": false,
+          "nullPointMode": "null",
+          "steppedLine": false,
+          "isNew": true,
+          "fill": 1,
+          "linewidth": 2,
+          "bars": false,
+          "grid": {
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "threshold1Color": "rgba(216, 200, 27, 0.27)"
+          },
+          "aliasColors": {},
+          "decimals": 0,
+          "hideTimeOverride": false,
+          "pointradius": 5,
+          "interval": ">30s",
+          "span": 6
+        },
+        {
+          "renderer": "flot",
+          "stack": false,
+          "legend": {
+            "current": true,
+            "total": true,
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "values": true,
+            "show": true,
+            "hideEmpty": false,
+            "rightSide": false,
+            "hideZero": false
+          },
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "cumulative",
+            "sort": 0
+          },
+          "yaxes": [
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": true,
+              "label": ""
+            },
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": false
+            }
+          ],
+          "error": false,
+          "title": "http_get_Count",
+          "type": "graph",
+          "seriesOverrides": [],
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "resultFormat": "time_series",
+              "dsType": "influxdb",
+              "alias": "http_get_Count",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "null"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "refId": "A",
+              "measurement": "monitor_app",
+              "policy": "default",
+              "rawQuery": false,
+              "tags": [
+                {
+                  "value": "http_get_Count",
+                  "key": "monitor_key",
+                  "operator": "="
+                }
+              ]
+            }
+          ],
+          "transparent": false,
+          "points": false,
+          "xaxis": {
+            "show": true
+          },
+          "percentage": false,
+          "links": [],
+          "id": 12,
+          "lines": true,
+          "editable": false,
+          "nullPointMode": "null",
+          "steppedLine": false,
+          "isNew": true,
+          "fill": 1,
+          "linewidth": 2,
+          "bars": false,
+          "grid": {
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "threshold1Color": "rgba(216, 200, 27, 0.27)"
+          },
+          "aliasColors": {},
+          "decimals": 0,
+          "hideTimeOverride": false,
+          "pointradius": 5,
+          "interval": ">30s",
+          "span": 6
+        },
+        {
+          "renderer": "flot",
+          "stack": false,
+          "legend": {
+            "current": true,
+            "total": true,
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "values": true,
+            "show": true,
+            "hideEmpty": false,
+            "rightSide": false,
+            "hideZero": false
+          },
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "cumulative",
+            "sort": 0
+          },
+          "yaxes": [
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": true,
+              "label": ""
+            },
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": false
+            }
+          ],
+          "error": false,
+          "title": "JVM_PS_Scavenge_Count",
+          "type": "graph",
+          "seriesOverrides": [],
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "resultFormat": "time_series",
+              "dsType": "influxdb",
+              "alias": "JVM_PS_Scavenge_Count",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "null"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "refId": "A",
+              "measurement": "monitor_app",
+              "policy": "default",
+              "rawQuery": false,
+              "tags": [
+                {
+                  "value": "JVM_PS_Scavenge_Count",
+                  "key": "monitor_key",
+                  "operator": "="
+                }
+              ]
+            }
+          ],
+          "transparent": false,
+          "points": false,
+          "xaxis": {
+            "show": true
+          },
+          "percentage": false,
+          "links": [],
+          "id": 13,
+          "lines": true,
+          "editable": false,
+          "nullPointMode": "null",
+          "steppedLine": false,
+          "isNew": true,
+          "fill": 1,
+          "linewidth": 2,
+          "bars": false,
+          "grid": {
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "threshold1Color": "rgba(216, 200, 27, 0.27)"
+          },
+          "aliasColors": {},
+          "decimals": 0,
+          "hideTimeOverride": false,
+          "pointradius": 5,
+          "interval": ">30s",
+          "span": 6
+        },
+        {
+          "renderer": "flot",
+          "stack": false,
+          "legend": {
+            "current": true,
+            "total": true,
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "values": true,
+            "show": true,
+            "hideEmpty": false,
+            "rightSide": false,
+            "hideZero": false
+          },
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "cumulative",
+            "sort": 0
+          },
+          "yaxes": [
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": true,
+              "label": ""
+            },
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": false
+            }
+          ],
+          "error": false,
+          "title": "抓取监控数据成功_Time",
+          "type": "graph",
+          "seriesOverrides": [],
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "resultFormat": "time_series",
+              "dsType": "influxdb",
+              "alias": "抓取监控数据成功_Time",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "null"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "refId": "A",
+              "measurement": "monitor_app",
+              "policy": "default",
+              "rawQuery": false,
+              "tags": [
+                {
+                  "value": "抓取监控数据成功_Time",
+                  "key": "monitor_key",
+                  "operator": "="
+                }
+              ]
+            }
+          ],
+          "transparent": false,
+          "points": false,
+          "xaxis": {
+            "show": true
+          },
+          "percentage": false,
+          "links": [],
+          "id": 14,
+          "lines": true,
+          "editable": false,
+          "nullPointMode": "null",
+          "steppedLine": false,
+          "isNew": true,
+          "fill": 1,
+          "linewidth": 2,
+          "bars": false,
+          "grid": {
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "threshold1Color": "rgba(216, 200, 27, 0.27)"
+          },
+          "aliasColors": {},
+          "decimals": 0,
+          "hideTimeOverride": false,
+          "pointradius": 5,
+          "interval": ">30s",
+          "span": 6
+        },
+        {
+          "renderer": "flot",
+          "stack": false,
+          "legend": {
+            "current": true,
+            "total": true,
+            "alignAsTable": true,
+            "avg": true,
+            "min": true,
+            "max": true,
+            "values": true,
+            "show": true,
+            "hideEmpty": false,
+            "rightSide": false,
+            "hideZero": false
+          },
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "cumulative",
+            "sort": 0
+          },
+          "yaxes": [
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": true,
+              "label": ""
+            },
+            {
+              "logBase": 1,
+              "format": "short",
+              "show": false
+            }
+          ],
+          "error": false,
+          "title": "启动一次拉取监控_Count",
+          "type": "graph",
+          "seriesOverrides": [],
+          "targets": [
+            {
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "resultFormat": "time_series",
+              "dsType": "influxdb",
+              "alias": "启动一次拉取监控_Count",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "null"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "refId": "A",
+              "measurement": "monitor_app",
+              "policy": "default",
+              "rawQuery": false,
+              "tags": [
+                {
+                  "value": "启动一次拉取监控_Count",
+                  "key": "monitor_key",
+                  "operator": "="
+                }
+              ]
+            }
+          ],
+          "transparent": false,
+          "points": false,
+          "xaxis": {
+            "show": true
+          },
+          "percentage": false,
+          "links": [],
+          "id": 15,
+          "lines": true,
+          "editable": false,
+          "nullPointMode": "null",
+          "steppedLine": false,
+          "isNew": true,
+          "fill": 1,
+          "linewidth": 2,
+          "bars": false,
+          "grid": {
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "threshold1Color": "rgba(216, 200, 27, 0.27)"
+          },
+          "aliasColors": {},
+          "decimals": 0,
+          "hideTimeOverride": false,
+          "pointradius": 5,
+          "interval": ">30s",
+          "span": 6
         }
       ],
-      "title": "Row"
-    },
-    {
+      "showTitle": true,
+      "title": "monitor_app",
       "collapse": false,
-      "editable": true,
-      "height": "250px",
-      "panels": [],
-      "title": "New row"
+      "height": "250px"
     }
   ],
-  "schemaVersion": 12,
-  "sharedCrosshair": false,
-  "style": "dark",
-  "tags": [],
+  "title": "monitor_app",
+  "version": 0,
   "templating": {
     "list": []
   },
-  "time": {
-    "from": "now-6h",
-    "to": "now"
-  },
+  "tags": [],
   "timepicker": {
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ],
     "refresh_intervals": [
       "5s",
       "10s",
@@ -161,20 +1728,22 @@
       "1h",
       "2h",
       "1d"
-    ],
-    "time_options": [
-      "5m",
-      "15m",
-      "1h",
-      "6h",
-      "12h",
-      "24h",
-      "2d",
-      "7d",
-      "30d"
     ]
   },
-  "timezone": "browser",
-  "title": "New dashboard",
-  "version": 2
+  "links": [
+    {
+      "targetBlank": true,
+      "icon": "external link",
+      "tooltip": "刷新",
+      "title": "刷新显示图",
+      "type": "link",
+      "url": "http://localhost:10933/refresh?orgId=1&appName=monitor_app",
+      "tags": []
+    }
+  ],
+  "style": "dark",
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  }
 }

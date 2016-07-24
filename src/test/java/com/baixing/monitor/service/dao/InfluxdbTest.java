@@ -24,10 +24,10 @@ public class InfluxdbTest {
 
     @Test
     public void writeTest() {
-        Map<String, Object> monitor = new HashMap<>();
-        monitor.put("key1", 1L);
-        monitor.put("key2", 2L);
-        monitor.put("key3", 3L);
+        Map<String, Long> monitor = new HashMap<>();
+        monitor.put("key1", 4L);
+        monitor.put("key2", 6L);
+        monitor.put("key3", 7L);
 
         influxdbDao.writeMap("1", "test", "localhost:8080", monitor);
 
@@ -36,6 +36,6 @@ public class InfluxdbTest {
 
     @Test
     public void getFieldTest() {
-        influxdbDao.getAllKeyField("yaoguang", "test");
+        influxdbDao.getAllKeyField("1", "test");
     }
 }

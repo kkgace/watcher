@@ -9,9 +9,9 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface DashMapper {
 
-    String GET_DASHBOARD_BY_ID = "select id, version, slug, title, data, org_id as orgId ," +
+    String GET_DASHBOARD_BY_ID = "select id, version, slug, title, data, org_id ," +
             "created, updated, updated_by as updatedBy, created_by as createdBy, gnet_id as gnetId," +
-            "plugin_id as pluginId from dashboard where orgId=#{orgId} and title=#{title}";
+            "plugin_id as pluginId from dashboard where org_id=#{orgId} and title=#{title}";
 
     String UPDATE_DATA_BY_ID = "UPDATE dashboard SET data=#{data} WHERE id =#{id}";
 
@@ -22,7 +22,7 @@ public interface DashMapper {
             "#{created}, #{updated}, #{updatedBy}, #{createdBy}, #{gnetId}, #{pluginId}) ";
 
     @Select(GET_DASHBOARD_BY_ID)
-    DashModel getDashboardById(int orgId, String title);
+    DashModel getDashboardById(@Param("orgId") int orgId, @Param("title") String title);
 
     //todo 更新人和时间
     @Update(UPDATE_DATA_BY_ID)
