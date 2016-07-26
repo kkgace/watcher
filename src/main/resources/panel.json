@@ -14,7 +14,7 @@
   },
   "hideTimeOverride": false,
   "id": 1,
-  "interval": "\u003e30s",
+  "interval": "\u003e60s",
   "isNew": true,
   "legend": {
     "alignAsTable": true,

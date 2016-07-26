@@ -58,8 +58,8 @@ public class TaskService implements SchedulingConfigurer {
     //每次启动线程数的大小
     private ExecutorService executor = Executors.newFixedThreadPool(5);
 
-    //每30秒执行一次
-    @Scheduled(fixedRate = 30000)
+    //每60秒执行一次
+    @Scheduled(fixedRate = 60000)
     public void runMonitorServer() {
 
         logger.info("开始拉监控数据, 应用数量={}", serverMap.size());

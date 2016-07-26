@@ -39,7 +39,7 @@ public class GetAndWritePoints implements Runnable {
             return;
         }
         try {
-            logger.info("抓取监控数据,orgId={},appName={},server={}", orgId, appName, host);
+
             long begin = System.currentTimeMillis();
 
             Map<String, Long> currentItems = httpGet(String.format(APP_URL, host));
@@ -50,6 +50,7 @@ public class GetAndWritePoints implements Runnable {
 
             DashServiceImpl.refrushMap(Integer.toString(orgId), appName, currentItems.keySet());
 
+            logger.info("抓取监控数据,orgId={},appName={},server={},size={}", orgId, appName, host, currentItems.size());
             BXMonitor.recordOne("抓取监控数据成功", System.currentTimeMillis() - begin);
 
         } catch (Exception e) {
