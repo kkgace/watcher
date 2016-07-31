@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kofee on 16/7/23.
@@ -32,13 +32,13 @@ public class Grafana {
 
         AppModel appModel = new AppModel();
         appModel.setName("测试标题2");
-        appModel.setDescr("测试描述");
+        appModel.setAppDesc("测试描述");
         dashService.addDashboard(appModel);
     }
 
     @Test
     public void addPanel() {
-        Set<String> panelKeyList = new TreeSet<>();
+        List<String> panelKeyList = new ArrayList<>();
         panelKeyList.add("key1");
         panelKeyList.add("key2");
         panelKeyList.add("key3");
@@ -56,7 +56,7 @@ public class Grafana {
         DashModel dashboard1 = new DashModel();
         dashboard1.setTitle("测试");
         dashboard1.setSlug("1");
-        result = dashMapper.insertADashboard(dashboard1);
+        result = dashMapper.addDashboard(dashboard1);
         System.out.println(result);
 
     }

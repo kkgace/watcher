@@ -3,7 +3,7 @@ package com.baixing.monitor.service;
 import com.alibaba.fastjson.JSONObject;
 import com.baixing.monitor.model.AppModel;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by kofee on 16/7/22.
@@ -14,15 +14,15 @@ public interface DashService {
     int addDashboard(AppModel appModel);
 
     //添加一个行
-    int addDashRow(JSONObject rowJson, int id);
+    int addDashRow(JSONObject rowJson, long id);
 
     //添加图
-    int addDashPanel(Set<String> panelKeySet, int orgId,String title);
+    int addDashPanel(List<String> panelKeySet, long orgId, String title);
 
-    int deleteDashPanel(int panelId, int dashId);
+    int deleteDashPanel(long panelId, long dashId);
 
+    int deleteRow(String title, long id);
 
-    int deleteRow(String title, int id);
-
-    int refreshDashboard(String orgId, String appName);
+    //刷新图
+    int refreshDashboard(long orgId, String appName);
 }

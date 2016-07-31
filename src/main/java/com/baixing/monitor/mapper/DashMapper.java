@@ -22,7 +22,7 @@ public interface DashMapper {
             "#{created}, #{updated}, #{updatedBy}, #{createdBy}, #{gnetId}, #{pluginId}) ";
 
     @Select(GET_DASHBOARD_BY_ID)
-    DashModel getDashboardById(@Param("orgId") int orgId, @Param("title") String title);
+    DashModel getDashboardById(@Param("orgId") long orgId, @Param("title") String title);
 
     //todo 更新人和时间
     @Update(UPDATE_DATA_BY_ID)
@@ -30,5 +30,5 @@ public interface DashMapper {
 
     //插入一条数据
     @Insert(INSERT_A_DASHBOARD)
-    int insertADashboard(DashModel dashModel);
+    int addDashboard(DashModel dashModel);
 }

@@ -31,13 +31,14 @@ public class AppServiceImpl implements AppService {
         try {
             //先在app表中将应用的信息插入
             int result = appMapper.addApp(appModel);
+            System.out.println(result);
 
             if (result == 1) {
                 //再生成应用的一个图表
                 result = dashService.addDashboard(appModel);
 
                 if (result == 1) {
-                    //todo更新
+                    //todo 更新
                     TaskService.addServerMap(appModel);
                 }
             }
@@ -46,6 +47,9 @@ public class AppServiceImpl implements AppService {
             return result;
         } catch (DuplicateKeyException e) {
             BXMonitor.recordOne("注册应用失败", System.currentTimeMillis() - begin);
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
             return -1;
         }
     }

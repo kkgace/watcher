@@ -1,8 +1,7 @@
 package com.baixing.monitor.service.dao;
 
 import com.baixing.monitor.Application;
-import com.baixing.monitor.dao.InfluxdbDao;
-import org.influxdb.InfluxDB;
+import com.baixing.monitor.dao.InfluxDBDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,22 +20,26 @@ import java.util.Map;
 public class InfluxdbTest {
 
     @Autowired
-    private InfluxdbDao influxdbDao;
+    private InfluxDBDao influxDBDao;
 
     @Test
     public void writeTest() {
-        Map<String, Long> monitor = new HashMap<>();
-        monitor.put("key1", 4L);
-        monitor.put("key2", 6L);
-        monitor.put("key3", 7L);
+        Map<String, Object> monitor = new HashMap<>();
+        monitor.put("key1", 1L);
+        monitor.put("key2", 2L);
+        monitor.put("key3", 3L);
 
-        influxdbDao.writeMap("1", "test", "localhost:8080", monitor);
+        influxDBDao.writePoints("grafana", "test", "localhost:8080", monitor);
 
 
     }
 
     @Test
     public void getFieldTest() {
-        influxdbDao.getAllKeyField("1", "test");
+        List<String> keys = influxDBDao.getFildKeys("grafana", "test");
+        System.out.println(keys);
+
+        keys = influxDBDao.getTagKeys("grafana", "test");
+        System.out.println(keys);
     }
 }

@@ -13,16 +13,16 @@ import java.util.Map;
  */
 public class HttpUtil {
 
-    public static Map<String, Long> httpGet(String urlToRead) {
+    public static Map<String, Object> httpGet(String urlToRead) {
         long begin = System.currentTimeMillis();
-        Map<String, Long> currentItems = null;
+        Map<String, Object> currentItems = null;
         try {
             URL url = new URL(urlToRead);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
-            currentItems = new HashMap<String, Long>();
+            currentItems = new HashMap<String, Object>();
             while ((line = rd.readLine()) != null) {
                 String[] strs = line.split("=");
                 if (strs != null && strs.length == 2) {

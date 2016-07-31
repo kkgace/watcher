@@ -1,7 +1,7 @@
 {
   "aliasColors": {},
   "bars": false,
-  "datasource": null,
+  "datasource": "InfluxDB-test",
   "decimals": 0,
   "editable": false,
   "error": false,
@@ -43,7 +43,7 @@
   "steppedLine": false,
   "targets": [
     {
-      "alias": "panel_key",
+      "alias": "monitor_key",
       "dsType": "influxdb",
       "groupBy": [
         {
@@ -68,7 +68,7 @@
         [
           {
             "params": [
-              "value"
+              "monitor_key"
             ],
             "type": "field"
           },
@@ -78,18 +78,12 @@
           }
         ]
       ],
-      "tags": [
-        {
-          "key": "monitor_key",
-          "operator": "=",
-          "value": "panel_key"
-        }
-      ]
+      "tags": []
     }
   ],
   "timeFrom": null,
   "timeShift": null,
-  "title": "panel_key",
+  "title": "monitor_key",
   "tooltip": {
     "msResolution": false,
     "shared": true,

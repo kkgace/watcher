@@ -3,8 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
     <title>应用注册</title>
 
+    <link rel="stylesheet" href="css/style.css"/>
 </head>
 
 <body>
@@ -28,28 +30,27 @@
         </div>
         <div>
             <span>应用名称:</span>
-            <input type="text" name="name" size="100" placeholder="英文、数字和下划线组合,不能有空格"/>
+            <input type="text" name="name" placeholder="英文、数字和下划线组合,不能有空格"/>
         </div>
         <div>
             <span>线上地址:</span>
-            <input type="text" name="host" size="100" placeholder="应用在线上部署的地址,ip:port的形式,多个应用中间用 , 分开"/>
+            <input type="text" name="host" placeholder="应用在线上部署的地址,ip:port的形式,多个应用中间用 , 分开"/>
         </div>
         <div>
             <span>应用描述:</span>
-            <input type="text" name="appDesc" size="100" placeholder="应用描述,可以为空"/>
+            <input type="text" name="appDesc" placeholder="应用描述,可以为空"/>
         </div>
         <div>
             <span>负责人员:</span>
-            <input type="text" name="charger" size="100" placeholder="应用负责人,多个中间用 , 隔开"/>
+            <input type="text" name="charger" placeholder="应用负责人,多个中间用 , 隔开"/>
         </div>
         <div>
             <span>联系邮箱:</span>
-            <input type="text" name="mail" size="100" placeholder="联系邮箱,多个中间用 , 隔开"/>
+            <input type="text" name="mail" placeholder="联系邮箱,多个中间用 , 隔开"/>
         </div>
-
         <div>
             <a href="help.html">
-                <button type="button">使用说明</button>
+                <button type="button" class="register-tis">使用说明</button>
             </a>
             <button id="submit" type="submit">注册</button>
         </div>
@@ -59,6 +60,13 @@
 
 </div>
 
+<script src="js/jquery.min.js"></script>
+<script src="js/common.js"></script>
+<!--背景图片自动更换-->
+<script src="js/supersized.3.2.7.min.js"></script>
+<script src="js/supersized-init.js"></script>
+<!--表单验证-->
+<script src="js/jquery.validate.min.js?var1.14.0"></script>
 
 </body>
 </html>

@@ -23,16 +23,32 @@ public class AppTest {
     @Autowired
     private AppService appService;
 
+
+    @Test
+    public void addApp(){
+        AppModel appModel = new AppModel();
+
+        appModel.setOrgId(1);
+        appModel.setName("测试应用");
+        appModel.setAppDesc("这是一个测试应用");
+        appModel.setCharger("kefei@baixing.com");
+        appModel.setMail("kefei@baixing.com");
+        appModel.setHost("storm01:8080,storm02:8080");
+
+        appMapper.addApp(appModel);
+    }
+
     @Test
     public void createApp() {
         AppModel appModel = new AppModel();
-        appModel.setName("测试应用2");
-        appModel.setDescr("这是一个测试应用");
-        appModel.setDuty("kefei@baixing.com");
-        appModel.setMail("kefei@baixing.com");
-        appModel.setServer("storm01:8080,storm02:8080");
 
-        //appMapper.addApp(appModel);
+        appModel.setOrgId(1);
+        appModel.setName("测试应用1");
+        appModel.setAppDesc("这是一个测试应用");
+        appModel.setCharger("kefei@baixing.com");
+        appModel.setMail("kefei@baixing.com");
+        appModel.setHost("storm01:8080,storm02:8080");
+
         appService.registerApp(appModel);
     }
 

@@ -1,4 +1,4 @@
-package com.baixing.monitor.client;
+package com.baixing.monitor.config;
 
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * Created by kofee on 16/7/20.
  */
 @Configuration
-public class InfluxdbConf {
+public class InfluxBDConf {
 
     @Value(value = "${influxdb.url}")
     private String url;
