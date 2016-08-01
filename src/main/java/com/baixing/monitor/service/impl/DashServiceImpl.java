@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 /**
@@ -42,7 +44,7 @@ public class DashServiceImpl implements DashService {
     }
 
 
-    private static final String REFRUSH_URL = "http://localhost:10933/api/refresh?orgId=%s&appName=%s";
+    private static final String REFRUSH_URL = "http://%s:10933/api/refresh?orgId=%s&appName=%s";
 
     /**
      * 每个dashboard是一个应用,每个应用只建一行（后面有需要再扩充）  每行建立多个panel
@@ -62,7 +64,17 @@ public class DashServiceImpl implements DashService {
 
 
         JSONObject linkJson = JSON.parseObject(linkStr);
-        linkJson.put("url", String.format(REFRUSH_URL, appModel.getOrgId(), appModel.getName()));
+        /**返回本地主机。*/
+        InetAddress addr = null;
+        try {
+            addr = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        /**返回 IP 地址字符串（以文本表现形式）*/
+        String ip = addr.getHostAddress();
+
+        linkJson.put("url", String.format(REFRUSH_URL, ip, appModel.getOrgId(), appModel.getName()));
         links.add(linkJson);
 
         JSONObject row = JSON.parseObject(rowStr);
