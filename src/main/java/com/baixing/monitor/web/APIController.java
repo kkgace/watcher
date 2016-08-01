@@ -68,7 +68,8 @@ public class APIController {
         logger.info("orgId={},appName={}", orgId, appName);
 
         int result = dashService.refreshDashboard(Long.parseLong(orgId), appName);
-        return null;
+
+        return "{\"状态\":" + result + "}";
     }
 
 

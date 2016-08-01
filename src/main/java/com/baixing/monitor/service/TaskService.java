@@ -4,8 +4,8 @@ import com.baixing.monitor.dao.InfluxDBDao;
 import com.baixing.monitor.mapper.DashMapper;
 import com.baixing.monitor.model.AppModel;
 import com.baixing.monitor.util.BXMonitor;
+import com.baixing.monitor.util.OrgEnum;
 import com.google.common.base.Splitter;
-import com.sun.tools.javac.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +17,9 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static com.baixing.monitor.util.HttpUtil.httpGet;
 
@@ -36,52 +34,48 @@ public class TaskService implements SchedulingConfigurer {
 
 
     @Autowired
-    private DashMapper dashMapper;
-
-    @Autowired
     private AppService appService;
 
     @Autowired
     private InfluxDBDao influxDBDao;
 
 
-    //组织和应用名称 是key   和 应用地址
-    private static Map<Pair<Long, String>, String> serverMap = new HashMap<>();
+    //全局记录应用信息
+    private static List<AppModel> appList = new ArrayList<>();
 
 
     //应用启动的时候从数据库读取
     @PostConstruct
     public void getAppServer() {
-        List<AppModel> temps = appService.getAllApp();
-        for (AppModel app : temps) {
-            Pair<Long, String> key = new Pair<>(app.getOrgId(), app.getName());
-            serverMap.put(key, app.getHost());
-        }
+        appList = appService.getAllApp();
+
     }
 
-
-    //每次启动线程数的大小
-    private ExecutorService executor = Executors.newFixedThreadPool(5);
-
-    //每60秒执行一次
+    //每一分钟执行一次
     @Scheduled(cron = "0 0/1 * * * ?")
     public void runMonitorServer() {
 
-        logger.info("开始拉监控数据, 应用数量={}", serverMap.size());
-        long begin = System.currentTimeMillis();
+        logger.info("开始拉监控数据, 应用数量={}", appList.size());
 
-        for (Map.Entry<Pair<Long, String>, String> app : serverMap.entrySet()) {
-            Pair<Long, String> key = app.getKey();
-            Long orgId = key.fst;
-            String name = key.snd;
-            String server = app.getValue();
+        long begin = System.currentTimeMillis();
+        if (appList.isEmpty()) {
+            BXMonitor.recordOne("应用数量为空");
+            return;
+        }
+
+        appList.forEach(app -> {
+
+            Long orgId = app.getOrgId();
+            String name = app.getName();
+            String hosts = app.getHost();
 
             //当有多台机器时要都去抓取
-            Iterable<String> temp = Splitter.on(",").split(server);
+            Iterable<String> temp = Splitter.on(",").split(hosts);
+
             for (String host : temp) {
                 getAndWritePoints(orgId, name, host);
             }
-        }
+        });
         logger.info("结束一次拉取,花费总时间={}", System.currentTimeMillis() - begin);
         BXMonitor.recordOne("启动一次拉取监控", System.currentTimeMillis() - begin);
 
@@ -96,16 +90,15 @@ public class TaskService implements SchedulingConfigurer {
 
             long begin = System.currentTimeMillis();
 
+            //通过http抓数
             Map<String, Object> currentItems = httpGet(String.format(APP_URL, host));
-            String database = "grafana";
-            if (orgId == 1) {
-                database = "grafana";
-            }
 
             if (currentItems == null || currentItems.isEmpty()) {
                 logger.warn("没有抓取到监控数据,orgId={},appName={},host={},size={}", orgId, appName, host, currentItems.size());
                 return;
             }
+
+            String database = OrgEnum.valueOf(Math.toIntExact(orgId)).getDatabase();
 
             influxDBDao.writePoints(database, appName, host, currentItems);
 
@@ -128,9 +121,9 @@ public class TaskService implements SchedulingConfigurer {
     }
 
 
-    public static void addServerMap(AppModel app) {
-        Pair<Long, String> key = new Pair<>(app.getOrgId(), app.getName());
-        serverMap.put(key, app.getHost());
+    public static void addApp(AppModel app) {
+        appList.add(app);
     }
+
 
 }

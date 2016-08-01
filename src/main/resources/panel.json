@@ -1,7 +1,7 @@
 {
   "aliasColors": {},
   "bars": false,
-  "datasource": "InfluxDB-test",
+  "datasource": "datasource",
   "decimals": 0,
   "editable": false,
   "error": false,

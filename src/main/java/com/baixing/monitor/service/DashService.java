@@ -17,7 +17,7 @@ public interface DashService {
     int addDashRow(JSONObject rowJson, long id);
 
     //添加图
-    int addDashPanel(List<String> panelKeySet, long orgId, String title);
+    int addDashPanel(List<String> panelKeySet, long orgId, String title, String database);
 
     int deleteDashPanel(long panelId, long dashId);
 

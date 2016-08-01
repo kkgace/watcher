@@ -42,7 +42,7 @@ public class Grafana {
         panelKeyList.add("key1");
         panelKeyList.add("key2");
         panelKeyList.add("key3");
-        dashService.addDashPanel(panelKeyList, 17, "");
+        dashService.addDashPanel(panelKeyList, 17, "","");
     }
 
     @Test

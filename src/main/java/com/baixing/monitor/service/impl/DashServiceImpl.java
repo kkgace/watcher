@@ -9,6 +9,7 @@ import com.baixing.monitor.model.DashModel;
 import com.baixing.monitor.model.AppModel;
 import com.baixing.monitor.service.DashService;
 import com.baixing.monitor.util.FileUtil;
+import com.baixing.monitor.util.OrgEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -92,7 +93,7 @@ public class DashServiceImpl implements DashService {
     }
 
     @Override
-    public int addDashPanel(List<String> keyList, long orgId, String title) {
+    public int addDashPanel(List<String> keyList, long orgId, String title, String database) {
         DashModel dashboard = dashMapper.getDashboardById(orgId, title);
 
         JSONObject data = JSON.parseObject(dashboard.getData());
@@ -110,6 +111,7 @@ public class DashServiceImpl implements DashService {
             temp = temp.replace("monitor_key", key);
 
             JSONObject panel = JSON.parseObject(temp);
+            panel.put("datasource", database);
             panel.put("id", count++);
             //添加一个图
             panels.add(panel);
@@ -135,13 +137,12 @@ public class DashServiceImpl implements DashService {
     @Override
     public int refreshDashboard(long orgId, String appName) {
 
-        //TODO 通过orgId 获取 database
-        if (orgId == 1) {
-            List<String> keyList = influxDBDao.getFildKeys("grafana", appName);
-            return addDashPanel(keyList, orgId, appName);
+        String database = OrgEnum.valueOf(Math.toIntExact(orgId)).getDatabase();
 
-        }
-        return -1;
+        List<String> keyList = influxDBDao.getFildKeys(database, appName);
+
+        return addDashPanel(keyList, orgId, appName, database);
+
     }
 
 

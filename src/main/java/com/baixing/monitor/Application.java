@@ -1,6 +1,5 @@
 package com.baixing.monitor;
 
-import com.baixing.monitor.service.GetAndWritePoints;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;

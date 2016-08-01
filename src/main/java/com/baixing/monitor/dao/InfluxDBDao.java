@@ -6,6 +6,8 @@ import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +19,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Repository
 public class InfluxDBDao {
+    private static final Logger logger = LoggerFactory.getLogger(InfluxDBDao.class);
 
     @Autowired
     private InfluxDB influxDB;
@@ -75,7 +78,8 @@ public class InfluxDBDao {
             keyList.forEach(key -> keys.add((String) key.get(0)));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("influxDB get key list error database={},measurement={},sql={}",
+                    database, measurement, sql, e);
         }
         return keys;
     }

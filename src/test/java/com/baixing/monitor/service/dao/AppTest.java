@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
+
 /**
  * Created by kofee on 16/7/23.
  */
@@ -25,7 +27,7 @@ public class AppTest {
 
 
     @Test
-    public void addApp(){
+    public void addApp() {
         AppModel appModel = new AppModel();
 
         appModel.setOrgId(1);
@@ -56,5 +58,12 @@ public class AppTest {
     public void getApp() {
         AppModel appModel = appMapper.getAppByNameOrgId("测试应用", 1);
         System.out.println(appModel);
+    }
+
+    @Test
+    public void getAllApp() {
+        List<AppModel> appList = appMapper.getAllApp();
+
+        System.out.println(appList.size());
     }
 }

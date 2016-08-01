@@ -6,6 +6,8 @@ import com.baixing.monitor.service.AppService;
 import com.baixing.monitor.service.DashService;
 import com.baixing.monitor.service.TaskService;
 import com.baixing.monitor.util.BXMonitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.List;
  */
 @Service
 public class AppServiceImpl implements AppService {
+    private static final Logger logger = LoggerFactory.getLogger(AppServiceImpl.class);
 
     @Autowired
     private AppMapper appMapper;
@@ -39,17 +42,19 @@ public class AppServiceImpl implements AppService {
 
                 if (result == 1) {
                     //todo 更新
-                    TaskService.addServerMap(appModel);
+                    TaskService.addApp(appModel);
                 }
             }
 
             BXMonitor.recordOne("注册应用", System.currentTimeMillis() - begin);
             return result;
         } catch (DuplicateKeyException e) {
-            BXMonitor.recordOne("注册应用失败", System.currentTimeMillis() - begin);
+            BXMonitor.recordOne("注册应用重复", System.currentTimeMillis() - begin);
+            logger.warn("注册应用重复 app={}", appModel, e);
             return 1;
         } catch (Exception e) {
-            e.printStackTrace();
+            BXMonitor.recordOne("注册应用失败", System.currentTimeMillis() - begin);
+            logger.error("注册应用失败 app={}", appModel, e);
             return -1;
         }
     }

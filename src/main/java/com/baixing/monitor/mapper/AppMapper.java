@@ -22,15 +22,19 @@ public interface AppMapper {
     String GET_ALL_APP = "select id, org_id AS orgId, app_name AS name, app_host AS host, app_desc AS appDesc, charger ,mail, created, updated " +
             " from application limit 100";
 
+    //添加一个应用
     @Insert(INSERT_A_APP)
     int addApp(AppModel appModel);
 
+    //通过name和orgId查询一个应用
     @Select(GET_APP_BY_NAME_ORG)
     AppModel getAppByNameOrgId(@Param("name") String name, @Param("orgId") int orgId);
 
-
+    //获取所有应用
     @Select(GET_ALL_APP)
     List<AppModel> getAllApp();
+
+    //TODO 修改一个应用
 
 
 }
