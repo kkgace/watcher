@@ -4,7 +4,84 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>应用注册</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Lantinghei SC', 'Open Sans', Arial, 'Hiragino Sans GB', 'Microsoft YaHei', 微软雅黑, STHeiti, 'WenQuanYi Micro Hei', SimSun, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #34495e;
+            background: #1abc9c;
+        }
+
+        .login-container {
+            width: 700px;
+            height: 600px;
+            margin: 50px auto 0;
+            background: #edeff1;
+            border-radius: 6px;
+            padding: 24px 23px 20px;
+            box-shadow: 0 0 1px rgba(10, 10, 10, 0.1);
+        }
+
+        .login-container h1 {
+            text-align: center;
+        }
+
+        .connect {
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        button {
+            color: #ffffff;
+            font-size: 16px;
+            padding: 10px 19px;
+            background: #1abc9c;
+            border-radius: 4px;
+            transition: border 0.25s linear, color 0.25s linear, background-color 0.25s linear;
+            border: none;
+            outline: none;
+            -webkit-appearance: none;
+            min-width: 94px;
+        }
+
+        select, input {
+            border: none;
+            color: #34495e;
+            background: white;
+            font-size: 15px;
+            padding: 8px 12px;
+            height: 42px;
+            width: 500px;
+            border-radius: 6px;
+            box-shadow: none;
+            transition: border 0.25s linear, color 0.25s linear, background-color 0.25s linear;
+        }
+
+        #registerForm div {
+            margin-bottom: 15px;
+        }
+
+        #registerForm div > span {
+            margin-right: 5px;
+        }
+
+        .control {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .control button {
+            margin-left: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -28,26 +105,26 @@
         </div>
         <div>
             <span>应用名称:</span>
-            <input type="text" name="name" size="100" placeholder="英文、数字和下划线组合,不能有空格"/>
+            <input type="text" name="name" placeholder="英文、数字和下划线组合,不能有空格"/>
         </div>
         <div>
             <span>线上地址:</span>
-            <input type="text" name="host" size="100" placeholder="应用在线上部署的地址,ip:port的形式,多个应用中间用 , 分开"/>
+            <input type="text" name="host" placeholder="应用在线上部署的地址,ip:port的形式,多个应用中间用 , 分开"/>
         </div>
         <div>
             <span>应用描述:</span>
-            <input type="text" name="appDesc" size="100" placeholder="应用描述,可以为空"/>
+            <input type="text" name="appDesc" placeholder="应用描述,可以为空"/>
         </div>
         <div>
             <span>负责人员:</span>
-            <input type="text" name="charger" size="100" placeholder="应用负责人,多个中间用 , 隔开"/>
+            <input type="text" name="charger" placeholder="应用负责人,多个中间用 , 隔开"/>
         </div>
         <div>
             <span>联系邮箱:</span>
-            <input type="text" name="mail" size="100" placeholder="联系邮箱,多个中间用 , 隔开"/>
+            <input type="text" name="mail" placeholder="联系邮箱,多个中间用 , 隔开"/>
         </div>
 
-        <div>
+        <div class="control">
             <a href="help.html">
                 <button type="button">使用说明</button>
             </a>
@@ -55,7 +132,6 @@
         </div>
 
     </form>
-
 
 </div>
 

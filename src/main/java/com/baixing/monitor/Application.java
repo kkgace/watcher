@@ -10,12 +10,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * Created by kofee on 16/7/11.
  */
 @SpringBootApplication
-@EnableScheduling
+//@EnableScheduling
 @EnableAsync
 public class Application {
 
     public static void main(String[] args) {
         ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
-        //GetAndWritePoints.setApplicationContext(applicationContext);
     }
 }

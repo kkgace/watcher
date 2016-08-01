@@ -8,7 +8,6 @@ public enum OrgEnum {
     Org2(2, "营收运营部", ""),
     Org3(3, "数据部", ""),
     Org4(4, "产品部", ""),
-    Org5(5, "", ""),
     Unknown(6, "", "");
 
     private long orgId;
@@ -31,8 +30,6 @@ public enum OrgEnum {
                 return Org3;
             case 4:
                 return Org4;
-            case 5:
-                return Org5;
         }
         return Unknown;
 
