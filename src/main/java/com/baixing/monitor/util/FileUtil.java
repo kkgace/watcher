@@ -35,11 +35,5 @@ public class FileUtil {
     }
 
 
-    public static void main(String[] args) {
-        System.out.println(getFileToJson("dashboard.json"));
-        System.out.println(getFileToJson("panel.json"));
-        System.out.println(getFileToJson("row.json"));
-    }
-
 
 }
