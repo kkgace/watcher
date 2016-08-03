@@ -4,7 +4,7 @@ package com.baixing.monitor.util;
  * Created by kofee on 16/7/31.
  */
 public enum OrgEnum {
-    Org1(1, "业务系统部", "grafana"),
+    Org1(1, "业务系统部", "yaoguang"),
     Org2(2, "营收运营部", ""),
     Org3(3, "数据部", ""),
     Org4(4, "产品部", ""),
