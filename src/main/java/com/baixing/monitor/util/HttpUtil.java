@@ -1,48 +1,159 @@
 package com.baixing.monitor.util;
 
+
+import com.google.common.io.CharStreams;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.*;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-/**
- * Created by kofee on 16/7/24.
- */
 public class HttpUtil {
     private static final Logger logger = LoggerFactory.getLogger(HttpUtil.class);
 
-    public static Map<String, Object> httpGet(String address) {
-        long begin = System.currentTimeMillis();
-        Map<String, Object> currentItems = null;
+    private static final String TYPE_URL_ENCODED = "application/x-www-form-urlencoded; charset=utf-8";
+    private static final String TYPE_JSON = "application/json; charset=UTF-8";
+
+
+    /**
+     * 表单方式提交
+     *
+     * @param url
+     * @param params
+     * @return
+     */
+    public static String post(String url, Map<String, String> params) {
+        List<NameValuePair> nameValuePairList = new ArrayList<>();
+        params.forEach((key, value) -> nameValuePairList.add(new BasicNameValuePair(key, value)));
+        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(nameValuePairList, Charset.forName("UTF-8"));
+
+        return post(url, entity, TYPE_URL_ENCODED);
+    }
+
+    /**
+     * json 字符串提交
+     *
+     * @param url
+     * @param json
+     * @return
+     */
+    public static String post(String url, String json) {
+        HttpEntity entity = new StringEntity(json, Charset.forName("utf-8"));
+
+        return post(url, entity, TYPE_JSON);
+    }
+
+
+    /**
+     * get 方法
+     *
+     * @param url
+     * @return
+     */
+    public static String get(String url) {
+        HttpGet httpGet = new HttpGet(url);
+        String result = null;
         try {
-            URL url = new URL(address);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line;
-            currentItems = new HashMap<String, Object>();
-            //TODO lambda表达式
-            while ((line = rd.readLine()) != null) {
-                String[] strs = line.split("=");
-                if (strs != null && strs.length == 2) {
-                    currentItems.put(strs[0], Long.parseLong(strs[1]));
-                }
-            }
-            rd.close();
-            BXMonitor.recordOne("http_get", System.currentTimeMillis() - begin);
+            result = request(httpGet);
+            logger.info("[http-get] url=[{}],response=[{}]", url, result);
         } catch (Exception e) {
-            logger.error("http get error!", e);
-            BXMonitor.recordOne("http_get_error", System.currentTimeMillis() - begin);
-        } finally {
-            logger.info("http_get url={},response={}", address, currentItems);
+            logger.error("http get error! url=[{}]", url, e);
         }
 
-        return currentItems;
+        return result;
+
     }
+
+    public static int delete(String url) {
+        int result = -1;
+        HttpDelete delete = new HttpDelete(url);
+        CloseableHttpClient httpclient = HttpClients.custom().build();
+        try {
+            CloseableHttpResponse response = httpclient.execute(delete);
+            result = response.getStatusLine().getStatusCode();
+        } catch (IOException e) {
+            e.printStackTrace();
+            result = -1;
+        } finally {
+            delete.releaseConnection();
+        }
+
+        return result;
+    }
+
+    private static String post(String url, HttpEntity entity, String contentType) {
+
+        String result = null;
+
+        try {
+            RequestConfig requestConfig = RequestConfig.custom()
+                    .setSocketTimeout(3000)
+                    .setConnectTimeout(3000)
+                    .build();
+
+            HttpPost httpPost = new HttpPost(url);
+            httpPost.setHeader("Content-Type", contentType);
+            httpPost.setConfig(requestConfig);
+            httpPost.setEntity(entity);
+
+            result = request(httpPost);
+
+            //String request = IOUtils.toString(entity.getContent());
+            String request = CharStreams.toString(new InputStreamReader(entity.getContent(), "UTF-8"));
+            logger.info("[http-post] url=[{}],request=[{}],response=[{}]", url, request, result);
+
+        } catch (Exception e) {
+            logger.error("http post error! url=[{}],request=[{}]", url, result, e);
+        }
+
+        return result;
+    }
+
+    private static String request(HttpUriRequest request) throws Exception {
+        String result = null;
+        //重试三次 每次间隔3000ms
+        CloseableHttpClient httpclient = HttpClients.custom()
+                .setRetryHandler((e, i, httpContext) -> {
+                            if (i <= 3) {
+                                try {
+                                    Thread.sleep(3000);
+                                } catch (InterruptedException e1) {
+                                    logger.error("http sleep error!", e1);
+                                }
+                                return true;
+                            }
+                            return false;
+                        }
+                )
+                .build();
+
+        CloseableHttpResponse response = httpclient.execute(request);
+        try {
+            HttpEntity respEntity = response.getEntity();
+
+            result = EntityUtils.toString(respEntity, Charset.forName("UTF-8"));
+
+            EntityUtils.consume(respEntity);
+        } finally {
+            response.close();
+        }
+
+        return result;
+    }
+
+
 }

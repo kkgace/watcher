@@ -11,7 +11,7 @@ public class FileUtil {
 
 
     //读取json文件
-    public static String getFileToJson(String fileName) {
+    public static String getFileToStr(String fileName) {
         String data = null;
         try {
             URL url = Thread.currentThread().getContextClassLoader().getResource(fileName);

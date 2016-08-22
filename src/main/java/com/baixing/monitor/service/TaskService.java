@@ -1,7 +1,6 @@
 package com.baixing.monitor.service;
 
 import com.baixing.monitor.dao.InfluxDBDao;
-import com.baixing.monitor.mapper.DashMapper;
 import com.baixing.monitor.model.AppModel;
 import com.baixing.monitor.util.BXMonitor;
 import com.baixing.monitor.util.OrgEnum;
@@ -20,8 +19,6 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static com.baixing.monitor.util.HttpUtil.httpGet;
 
 
 /**
@@ -91,7 +88,7 @@ public class TaskService implements SchedulingConfigurer {
             long begin = System.currentTimeMillis();
 
             //通过http抓数
-            Map<String, Object> currentItems = httpGet(String.format(APP_URL, host));
+            Map<String, Object> currentItems = null;// = HttpUtil.get(String.format(APP_URL, host));
 
             if (currentItems == null || currentItems.isEmpty()) {
                 logger.warn("没有抓取到监控数据,orgId={},appName={},host={},size={}", orgId, appName, host, currentItems.size());

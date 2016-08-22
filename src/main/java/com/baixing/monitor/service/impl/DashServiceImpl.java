@@ -37,10 +37,10 @@ public class DashServiceImpl implements DashService {
 
     @PostConstruct
     public void init() {
-        dashStr = FileUtil.getFileToJson("dashboard.json");
-        rowStr = FileUtil.getFileToJson("row.json");
-        panelStr = FileUtil.getFileToJson("panel.json");
-        linkStr = FileUtil.getFileToJson("link.json");
+        dashStr = FileUtil.getFileToStr("dashboard.json");
+        rowStr = FileUtil.getFileToStr("row.json");
+        panelStr = FileUtil.getFileToStr("panel.json");
+        linkStr = FileUtil.getFileToStr("link.json");
     }
 
 
