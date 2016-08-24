@@ -1,11 +1,9 @@
 package com.baixing.monitor.web;
 
 import com.baixing.monitor.model.AppModel;
-import com.baixing.monitor.model.ResponseModel;
 import com.baixing.monitor.service.AppService;
 import com.baixing.monitor.service.DashService;
-import com.baixing.monitor.util.BXMonitor;
-import com.baixing.monitor.util.OrgEnum;
+import com.baixing.monitor.util.BxMonitor;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,7 +92,7 @@ public class APIController {
     @ResponseBody
     public String monitor() {
         StringBuilder out = new StringBuilder();
-        for (Map.Entry<String, Long> entry : BXMonitor.getValues().entrySet()) {
+        for (Map.Entry<String, Long> entry : BxMonitor.getItemMap().entrySet()) {
             String name = entry.getKey();
             Number value = entry.getValue();
             out.append(name + "=" + value + "\n");

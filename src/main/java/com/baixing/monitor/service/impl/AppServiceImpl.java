@@ -4,8 +4,9 @@ import com.baixing.monitor.mapper.AppMapper;
 import com.baixing.monitor.model.AppModel;
 import com.baixing.monitor.service.AppService;
 import com.baixing.monitor.service.DashService;
+import com.baixing.monitor.service.PullDataService;
 import com.baixing.monitor.service.TaskService;
-import com.baixing.monitor.util.BXMonitor;
+import com.baixing.monitor.util.BxMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,18 +43,18 @@ public class AppServiceImpl implements AppService {
 
                 if (result == 1) {
                     //todo 更新
-                    TaskService.addApp(appModel);
+                    PullDataService.addApp(appModel);
                 }
             }
 
-            BXMonitor.recordOne("注册应用", System.currentTimeMillis() - begin);
+            BxMonitor.recordOne("注册应用", System.currentTimeMillis() - begin);
             return result;
         } catch (DuplicateKeyException e) {
-            BXMonitor.recordOne("注册应用重复", System.currentTimeMillis() - begin);
+            BxMonitor.recordOne("注册应用重复", System.currentTimeMillis() - begin);
             logger.warn("注册应用重复 app={}", appModel, e);
             return 1;
         } catch (Exception e) {
-            BXMonitor.recordOne("注册应用失败", System.currentTimeMillis() - begin);
+            BxMonitor.recordOne("注册应用失败", System.currentTimeMillis() - begin);
             logger.error("注册应用失败 app={}", appModel, e);
             return -1;
         }
@@ -68,7 +69,7 @@ public class AppServiceImpl implements AppService {
     public List<AppModel> getAllApp() {
         long begin = System.currentTimeMillis();
         List<AppModel> appModelList = appMapper.getAllApp();
-        BXMonitor.recordOne("get_all_app", System.currentTimeMillis() - begin);
+        BxMonitor.recordOne("get_all_app", System.currentTimeMillis() - begin);
         return appModelList;
     }
 

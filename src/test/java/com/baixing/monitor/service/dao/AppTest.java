@@ -1,6 +1,6 @@
 package com.baixing.monitor.service.dao;
 
-import com.baixing.monitor.Application;
+import com.baixing.monitor.WatcherApplication;
 import com.baixing.monitor.mapper.AppMapper;
 import com.baixing.monitor.model.AppModel;
 import com.baixing.monitor.service.AppService;
@@ -16,7 +16,7 @@ import java.util.List;
  * Created by kofee on 16/7/23.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(Application.class)
+@SpringApplicationConfiguration(WatcherApplication.class)
 public class AppTest {
 
     @Autowired

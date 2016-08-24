@@ -3,7 +3,7 @@ package com.baixing.monitor.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.baixing.monitor.dao.InfluxDBDao;
+import com.baixing.monitor.util.InfluxDBClient;
 import com.baixing.monitor.mapper.DashMapper;
 import com.baixing.monitor.model.DashModel;
 import com.baixing.monitor.model.AppModel;
@@ -28,7 +28,7 @@ public class DashServiceImpl implements DashService {
     private DashMapper dashMapper;
 
     @Autowired
-    private InfluxDBDao influxDBDao;
+    private InfluxDBClient influxDBClient;
 
     private String dashStr;
     private String rowStr;
@@ -151,7 +151,7 @@ public class DashServiceImpl implements DashService {
 
         String database = OrgEnum.valueOf(Math.toIntExact(orgId)).getDatabase();
 
-        List<String> keyList = influxDBDao.getFildKeys(database, appName);
+        List<String> keyList = influxDBClient.getFildKeys(database, appName);
 
         return addDashPanel(keyList, orgId, appName, database);
 

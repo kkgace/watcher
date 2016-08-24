@@ -37,7 +37,7 @@ public class AlertConf {
 
 
         JSONObject param = new JSONObject();
-        param.put("type", "stream");
+
 
         JSONObject dbrp = new JSONObject();
         dbrp.put("db", "yaoguang");
@@ -45,6 +45,7 @@ public class AlertConf {
         JSONArray dbrps = new JSONArray();
         dbrps.add(dbrp);
 
+        param.put("type", "stream");
         param.put("dbrps", dbrps);
         param.put("script", alert);
         param.put("status", "enabled");

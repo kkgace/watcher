@@ -1,6 +1,5 @@
-package com.baixing.monitor.dao;
+package com.baixing.monitor.util;
 
-import com.baixing.monitor.util.BXMonitor;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
@@ -18,8 +17,8 @@ import java.util.concurrent.TimeUnit;
  * Created by kofee on 16/7/20.
  */
 @Repository
-public class InfluxDBDao {
-    private static final Logger logger = LoggerFactory.getLogger(InfluxDBDao.class);
+public class InfluxDBClient {
+    private static final Logger logger = LoggerFactory.getLogger(InfluxDBClient.class);
 
     @Autowired
     private InfluxDB influxDB;
@@ -52,7 +51,33 @@ public class InfluxDBDao {
 
         influxDB.write(batchPoints);
 
-        BXMonitor.recordOne("influxdb_write_points", System.currentTimeMillis() - begin);
+        BxMonitor.recordOne("influxdb_write_points", System.currentTimeMillis() - begin);
+
+    }
+
+
+    public void writePoints(String database, String measurement, Map<String, String> tagMap, Map<String, Object> fieldMap) {
+
+        long begin = System.currentTimeMillis();
+
+        BatchPoints batchPoints = BatchPoints
+                .database(database)
+                .retentionPolicy("default")
+                .consistency(InfluxDB.ConsistencyLevel.ALL)
+                .build();
+
+        Point point = Point.measurement(measurement)
+                .tag(tagMap)
+                .fields(fieldMap)
+                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .build();
+
+        batchPoints.point(point);
+
+
+        influxDB.write(batchPoints);
+
+        BxMonitor.recordOne("influxdb_write_points", System.currentTimeMillis() - begin);
 
     }
 

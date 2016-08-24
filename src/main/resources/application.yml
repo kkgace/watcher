@@ -13,3 +13,16 @@ influxdb:
   url: http://storm01:8086
   user: root
   password: root
+
+storm:
+  cluster:
+    url: http://storm01:18080
+  database: application
+  measurement: storm
+
+zookeeper:
+  cluster:
+    url: storm01:2181,storm02:2181,storm03:2181
+  database: application
+  measurement: zookeeper
+
