@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * Created by kofee on 16/7/11.
  */
 @SpringBootApplication
-@EnableScheduling
+//@EnableScheduling
 @EnableAsync
 public class WatcherApplication {
 

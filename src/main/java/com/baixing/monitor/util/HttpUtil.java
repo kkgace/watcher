@@ -1,6 +1,7 @@
 package com.baixing.monitor.util;
 
 
+import com.google.common.base.Strings;
 import com.google.common.io.CharStreams;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -41,7 +42,7 @@ public class HttpUtil {
         params.forEach((key, value) -> nameValuePairList.add(new BasicNameValuePair(key, value)));
         UrlEncodedFormEntity entity = new UrlEncodedFormEntity(nameValuePairList, Charset.forName("UTF-8"));
 
-        return post(url, entity, TYPE_URL_ENCODED);
+        return post(url, entity, TYPE_URL_ENCODED, null);
     }
 
     /**
@@ -53,8 +54,12 @@ public class HttpUtil {
      */
     public static String post(String url, String json) {
         HttpEntity entity = new StringEntity(json, Charset.forName("utf-8"));
+        return post(url, entity, TYPE_JSON, null);
+    }
 
-        return post(url, entity, TYPE_JSON);
+    public static String post(String url, String json, String auth) {
+        HttpEntity entity = new StringEntity(json, Charset.forName("utf-8"));
+        return post(url, entity, TYPE_JSON, auth);
     }
 
 
@@ -65,7 +70,14 @@ public class HttpUtil {
      * @return
      */
     public static String get(String url) {
+        return get(url, null);
+    }
+
+    public static String get(String url, String auth) {
         HttpGet httpGet = new HttpGet(url);
+        if (!Strings.isNullOrEmpty(auth)) {
+            httpGet.setHeader("Authorization", auth);
+        }
         String result = null;
         try {
             result = request(httpGet);
@@ -75,12 +87,18 @@ public class HttpUtil {
         }
 
         return result;
-
     }
 
     public static int delete(String url) {
+        return delete(url, null);
+    }
+
+    public static int delete(String url, String auth) {
         int result = -1;
         HttpDelete delete = new HttpDelete(url);
+        if (!Strings.isNullOrEmpty(auth)) {
+            delete.setHeader("Authorization", auth);
+        }
         CloseableHttpClient httpclient = HttpClients.custom().build();
         try {
             CloseableHttpResponse response = httpclient.execute(delete);
@@ -95,7 +113,8 @@ public class HttpUtil {
         return result;
     }
 
-    private static String post(String url, HttpEntity entity, String contentType) {
+
+    private static String post(String url, HttpEntity entity, String contentType, String auth) {
 
         String result = null;
 
@@ -107,12 +126,13 @@ public class HttpUtil {
 
             HttpPost httpPost = new HttpPost(url);
             httpPost.setHeader("Content-Type", contentType);
+            if (!Strings.isNullOrEmpty(auth)) {
+                httpPost.setHeader("Authorization", auth);
+            }
             httpPost.setConfig(requestConfig);
             httpPost.setEntity(entity);
 
             result = request(httpPost);
-
-            //String request = IOUtils.toString(entity.getContent());
             String request = CharStreams.toString(new InputStreamReader(entity.getContent(), "UTF-8"));
             logger.info("[http-post] url=[{}],request=[{}],response=[{}]", url, request, result);
 

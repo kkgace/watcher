@@ -2,10 +2,10 @@
   "annotations": {
     "list": []
   },
-  "description": "应用描述",
-  "editable": false,
+  "description": "",
+  "editable": true,
   "gnetId": null,
-  "hideControls": true,
+  "hideControls": false,
   "id": null,
   "links": [],
   "rows": [],
@@ -17,7 +17,7 @@
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {
@@ -46,6 +46,6 @@
     ]
   },
   "timezone": "browser",
-  "title": "应用标题",
-  "version": 0
+  "title": "",
+  "version": 1
 }

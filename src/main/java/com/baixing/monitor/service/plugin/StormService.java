@@ -3,7 +3,7 @@ package com.baixing.monitor.service.plugin;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baixing.monitor.util.HttpUtil;
-import com.baixing.monitor.util.InfluxDBClient;
+import com.baixing.monitor.service.external.InfluxDBService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class StormService {
     private String measurement;
 
     @Autowired
-    private InfluxDBClient influxDBClient;
+    private InfluxDBService influxDBService;
 
     private static final String CLUSTER_SUMMARY = "/api/v1/cluster/summary";
     //private static final String SUPERVISOR_SUMMARY = "/api/v1/supervisor/summary";
@@ -52,7 +52,7 @@ public class StormService {
             fieldMap.put(key, value);
         }
 
-        influxDBClient.writePoints(database, measurement, new HashMap<String, String>(), fieldMap);
+        influxDBService.writePoints(database, measurement, new HashMap<String, String>(), fieldMap);
 
     }
 }

@@ -1,8 +1,8 @@
 {
   "collapse": false,
-  "editable": false,
+  "editable": true,
   "height": "250px",
   "panels": [],
   "showTitle": true,
-  "title": "行标题"
+  "title": "ApplicationName"
 }

@@ -1,0 +1,12 @@
+var data = stream
+    |from()
+        .measurement('%s')
+        .groupBy('%s')
+data
+    |alert()
+        .id('%s {{ index .Tags "%s" }}')
+        .message('{{ .ID }} is {{ .Level }} %s:{{ index .Fields "%s" }}/30s')
+        .crit(lambda: "%s" %s)
+        .stateChangesOnly()
+        .slack()
+        .email('%s')

@@ -26,10 +26,10 @@ public class ZookeeperService {
     private String measurement;
 
 
-    @Autowired
+    //@Autowired
     ZooKeeper zooKeeper;
 
-    @Bean
+    //@Bean
     private ZooKeeper getZookeeper() {
         ZooKeeper zookeeper = null;
         try {

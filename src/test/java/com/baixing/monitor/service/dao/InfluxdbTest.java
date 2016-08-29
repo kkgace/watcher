@@ -1,7 +1,7 @@
 package com.baixing.monitor.service.dao;
 
 import com.baixing.monitor.WatcherApplication;
-import com.baixing.monitor.util.InfluxDBClient;
+import com.baixing.monitor.service.external.InfluxDBService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class InfluxdbTest {
 
     @Autowired
-    private InfluxDBClient influxDBClient;
+    private InfluxDBService influxDBService;
 
     @Test
     public void writeTest() {
@@ -29,17 +29,17 @@ public class InfluxdbTest {
         monitor.put("key2", 2L);
         monitor.put("key3", 3L);
 
-        influxDBClient.writePoints("grafana", "test", "localhost:8080", monitor);
+        influxDBService.writePoints("grafana", "test", "localhost:8080", monitor);
 
 
     }
 
     @Test
     public void getFieldTest() {
-        List<String> keys = influxDBClient.getFildKeys("grafana", "test");
+        List<String> keys = influxDBService.getFieldKeys("grafana", "test");
         System.out.println(keys);
 
-        keys = influxDBClient.getTagKeys("grafana", "test");
+        keys = influxDBService.getTagKeys("grafana", "test");
         System.out.println(keys);
     }
 }

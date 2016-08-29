@@ -3,6 +3,7 @@ package com.baixing.monitor.mapper;
 import com.baixing.monitor.model.AppModel;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,30 +12,40 @@ import java.util.List;
 @Mapper
 public interface AppMapper {
 
-    String INSERT_A_APP = "insert into application ( org_id, app_name, app_host, app_desc, charger ,mail, created, updated ) " +
-            "values (#{orgId}, #{name}, #{host}, #{appDesc}, #{charger}, #{mail}, #{created}, #{updated}) ";
+    String INSERT_A_APP = "insert into application ( organization, `group`, name, host, style, mode, `describe`, contact, email, token, created, updated ) " +
+            "values (#{organization}, #{group}, #{name}, #{host}, #{style}, #{mode}, #{describe}, #{contact}, #{email}, #{token}, #{created}, #{updated}) ";
 
+    String GET_APP_BY_NAME_GROUP = "select * from application where name=#{name} and `group`=#{group}";
 
-    String GET_APP_BY_NAME_ORG = "select id, org_id AS orgId, app_name AS name, app_host AS host, app_desc AS appDesc, charger ,mail, created, updated " +
-            " from application where app_name=#{name} and org_id=#{orgId}";
+    String GET_ALL_APP = "select * from application limit 100";
 
+    String GET_BY_TOKEN = "select * from application where token=#{token}";
 
-    String GET_ALL_APP = "select id, org_id AS orgId, app_name AS name, app_host AS host, app_desc AS appDesc, charger ,mail, created, updated " +
-            " from application limit 100";
+    String GET_BY_STYLE = "select * from application where style=#{style}";
+
+    String UPDATE_TOKEN = "update application set token=#{token}, updated=#{updated} where name=#{name} and `group`=#{group}";
 
     //添加一个应用
     @Insert(INSERT_A_APP)
     int addApp(AppModel appModel);
 
     //通过name和orgId查询一个应用
-    @Select(GET_APP_BY_NAME_ORG)
-    AppModel getAppByNameOrgId(@Param("name") String name, @Param("orgId") int orgId);
+    @Select(GET_APP_BY_NAME_GROUP)
+    AppModel getAppByNameGroup(@Param("name") String name, @Param("group") String group);
 
     //获取所有应用
     @Select(GET_ALL_APP)
     List<AppModel> getAllApp();
 
-    //TODO 修改一个应用
+    //获取一个应用的token
+    @Select(GET_BY_TOKEN)
+    AppModel getByToken(@Param("token") String token);
 
+    @Select(GET_BY_STYLE)
+    List<AppModel> getByStyle(@Param("style") String style);
+
+    @Update(UPDATE_TOKEN)
+    int updateToken(@Param("token") String token, @Param("name") String name,
+                    @Param("group") String group, @Param("updated") Date updated);
 
 }

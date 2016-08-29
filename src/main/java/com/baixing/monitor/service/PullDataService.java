@@ -1,8 +1,8 @@
 package com.baixing.monitor.service;
 
 import com.baixing.monitor.model.AppModel;
+import com.baixing.monitor.service.external.InfluxDBService;
 import com.baixing.monitor.util.BxMonitor;
-import com.baixing.monitor.util.InfluxDBClient;
 import com.baixing.monitor.util.OrgEnum;
 import com.google.common.base.Splitter;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ public class PullDataService {
     private static final Logger logger = LoggerFactory.getLogger(PullDataService.class);
 
     @Autowired
-    private InfluxDBClient influxDBClient;
+    private InfluxDBService influxDBService;
 
     @Autowired
     private AppService appService;
@@ -35,29 +35,29 @@ public class PullDataService {
 
 
     //全局记录应用信息
-    private static List<AppModel> appList = new ArrayList<>();
+    private static List<AppModel> appPullList = new ArrayList<>();
 
 
     //应用启动的时候从数据库读取
     @PostConstruct
     public void getAppServer() {
-        appList = appService.getAllApp();
+        appPullList = appService.getAllPullApp();
 
     }
 
     public void pullData() {
 
-        logger.info("开始拉监控数据, 应用数量={}", appList.size());
+        logger.info("开始拉监控数据, 应用数量={}", appPullList.size());
 
         long begin = System.currentTimeMillis();
-        if (appList.isEmpty()) {
+        if (appPullList.isEmpty()) {
             BxMonitor.recordOne("应用数量为空");
             return;
         }
 
-        appList.forEach(app -> {
+        appPullList.forEach(app -> {
 
-            Long orgId = app.getOrgId();
+            String group = app.getGroup();
             String name = app.getName();
             String hosts = app.getHost();
 
@@ -65,7 +65,7 @@ public class PullDataService {
             Iterable<String> temp = Splitter.on(",").split(hosts);
 
             for (String host : temp) {
-                getAndWritePoints(orgId, name, host);
+                getAndWritePoints(group, name, host);
             }
         });
         logger.info("结束一次拉取,花费总时间={}", System.currentTimeMillis() - begin);
@@ -73,7 +73,7 @@ public class PullDataService {
     }
 
     @Async
-    private void getAndWritePoints(Long orgId, String appName, String host) {
+    private void getAndWritePoints(String group, String appName, String host) {
         try {
 
             long begin = System.currentTimeMillis();
@@ -82,26 +82,24 @@ public class PullDataService {
             Map<String, Object> currentItems = null;// = HttpUtil.get(String.format(APP_URL, host));
 
             if (currentItems == null || currentItems.isEmpty()) {
-                logger.warn("没有抓取到监控数据,orgId={},appName={},host={},size={}", orgId, appName, host, currentItems.size());
+                logger.warn("没有抓取到监控数据,group={},appName={},host={},size={}", group, appName, host, currentItems.size());
                 return;
             }
 
-            String database = OrgEnum.valueOf(Math.toIntExact(orgId)).getDatabase();
+            influxDBService.writePoints(group, appName, host, currentItems);
 
-            influxDBClient.writePoints(database, appName, host, currentItems);
-
-            logger.info("抓取监控数据,orgId={},appName={},host={},size={}", orgId, appName, host, currentItems.size());
+            logger.info("抓取监控数据,group={},appName={},host={},size={}", group, appName, host, currentItems.size());
             BxMonitor.recordOne("抓取监控数据成功", System.currentTimeMillis() - begin);
 
         } catch (Exception e) {
-            logger.error("抓取监控数据失败,orgId={},appName={},host={}", orgId, appName, host, e);
+            logger.error("抓取监控数据失败,orgId={},appName={},host={}", group, appName, host, e);
             BxMonitor.recordOne("抓取监控失败");
         }
     }
 
 
     public static void addApp(AppModel app) {
-        appList.add(app);
+        appPullList.add(app);
     }
 
 

@@ -9,10 +9,23 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
+#  thymeleaf:
+#    mode: HTML5
+#    encoding: UTF-8
+#    content-type: text/html
+#    cache: true
+
 influxdb:
   url: http://storm01:8086
   user: root
   password: root
+
+grafana:
+  url: http://storm01:3000
+  api.key: eyJrIjoic1FJaFliTTNwUEo1QTR4OFFINDJwWjZQaEdBUnBaNkoiLCJuIjoiYWRtaW4iLCJpZCI6MX0=
+
+kapacitor:
+  url: http://storm01:9093
 
 storm:
   cluster:

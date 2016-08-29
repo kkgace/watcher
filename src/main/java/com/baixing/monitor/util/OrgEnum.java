@@ -10,11 +10,11 @@ public enum OrgEnum {
     Org4(4, "产品部", ""),
     Unknown(6, "", "");
 
-    private long orgId;
+    private int orgId;
     private String orgDesc;
     private String database;
 
-    OrgEnum(long orgId, String orgDesc, String database) {
+    OrgEnum(int orgId, String orgDesc, String database) {
         this.orgId = orgId;
         this.orgDesc = orgDesc;
         this.database = database;
@@ -35,7 +35,7 @@ public enum OrgEnum {
 
     }
 
-    public long getOrgId() {
+    public int getOrgId() {
         return orgId;
     }
 

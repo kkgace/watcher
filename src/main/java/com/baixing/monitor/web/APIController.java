@@ -1,16 +1,21 @@
 package com.baixing.monitor.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baixing.monitor.model.AppModel;
+import com.baixing.monitor.model.ResponseModel;
 import com.baixing.monitor.service.AppService;
-import com.baixing.monitor.service.DashService;
+import com.baixing.monitor.service.PushDataService;
+import com.baixing.monitor.service.external.GrafanaService;
 import com.baixing.monitor.util.BxMonitor;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
@@ -20,6 +25,7 @@ import java.util.Map;
  * 接收post请求,返回页面
  */
 @Controller
+@RequestMapping(value = "/api")
 public class APIController {
 
     private static final Logger logger = LoggerFactory.getLogger(APIController.class);
@@ -28,57 +34,81 @@ public class APIController {
     private AppService appService;
 
     @Autowired
-    private DashService dashService;
+    private PushDataService pushDataService;
+
+    @Autowired
+    private GrafanaService dashService;
 
     //应用注册
-    @RequestMapping(value = "/api/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String appRegister(AppModel appModel, Model model) {
 
         String errorMsg = "";
         if (appModel == null) {
             errorMsg = "application为空";
+        } else if (Strings.isNullOrEmpty(appModel.getGroup())) {
+            errorMsg = "应用分组不能为空";
         } else if (Strings.isNullOrEmpty(appModel.getName())) {
             errorMsg = "应用名称不能为空";
         } else if (Strings.isNullOrEmpty(appModel.getHost())) {
             errorMsg = "host地址不能为空";
-        } else if (Strings.isNullOrEmpty(appModel.getCharger())) {
-            errorMsg = "负责人不能为空";
-        } else if (appModel.getOrgId() <= 0L) {
+        } else if (Strings.isNullOrEmpty(appModel.getContact())) {
+            errorMsg = "联系人不能为空";
+        } else if (appModel.getOrganization() <= 0) {
             errorMsg = "部门不正确";
         }
 
         if (!errorMsg.isEmpty()) {
             model.addAttribute("errorMsg", errorMsg);
-            return "index";
+            return "redirect:/register";
         } else {
 
-            int result = appService.registerApp(appModel);
+            ResponseModel result = appService.register(appModel);
 
-            if (result == 1) {
+            if (result.getCode() == 1) {
                 return "success";
-            } else if (result == -1) {
+            } else if (result.getCode() == -1) {
                 errorMsg = "应用名称重复";
             } else {
                 errorMsg = "服务器错误";
             }
             model.addAttribute("errorMsg", errorMsg);
-            return "index";
+            return "redirect:/register";
         }
-
-
     }
 
-    //刷新dashboard
-    @RequestMapping(value = "/api/refresh", method = RequestMethod.GET)
-    public String refreshDashboard(@RequestParam("orgId") String orgId,
-                                   @RequestParam("appName") String appName) {
-        logger.info("orgId={},appName={}", orgId, appName);
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public String loginCheck(@RequestParam(value = "username") String username,
+                             @RequestParam(value = "password") String password,
+                             RedirectAttributes model) {
+        logger.info("api requset:username={},password={}", username, password);
 
-        int result = dashService.refreshDashboard(Long.parseLong(orgId), appName);
-
-        return "{\"状态\":" + result + "}";
+        if (username.equals("admin")) {
+            return "redirect:/index";
+        } else {
+            model.addFlashAttribute("message", "密码错误");
+            return "redirect:/login";
+        }
     }
 
+    @RequestMapping(value = "/refresh", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public String getPushMetric(@RequestBody JSONObject metricJson) {
+
+
+        return "{\"状态\":" + "}";
+    }
+
+    //接收推送的指标
+    @RequestMapping(value = "/push", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public ResponseModel refreshDashboard(@RequestBody JSONObject metricJson) {
+        logger.info("request metricJson={}", metricJson);
+
+        ResponseModel result = pushDataService.writePushMetric(metricJson);
+
+        return result;
+    }
 
     //检测服务是否可用
     @RequestMapping(value = "/healthcheck")

@@ -1,9 +1,8 @@
 {
   "aliasColors": {},
   "bars": false,
-  "datasource": "datasource",
-  "decimals": 0,
-  "editable": false,
+  "datasource": "DataSourceName",
+  "editable": true,
   "error": false,
   "fill": 1,
   "grid": {
@@ -12,19 +11,15 @@
     "threshold2": null,
     "threshold2Color": "rgba(234, 112, 112, 0.22)"
   },
-  "hideTimeOverride": false,
   "id": 1,
-  "interval": "\u003e60s",
+  "interval": "\u003e30s",
   "isNew": true,
   "legend": {
     "alignAsTable": true,
     "avg": true,
     "current": true,
-    "hideEmpty": false,
-    "hideZero": false,
     "max": true,
     "min": true,
-    "rightSide": false,
     "show": true,
     "total": true,
     "values": true
@@ -34,8 +29,8 @@
   "links": [],
   "nullPointMode": "null",
   "percentage": false,
-  "pointradius": 5,
-  "points": false,
+  "pointradius": 1,
+  "points": true,
   "renderer": "flot",
   "seriesOverrides": [],
   "span": 6,
@@ -43,7 +38,6 @@
   "steppedLine": false,
   "targets": [
     {
-      "alias": "monitor_key",
       "dsType": "influxdb",
       "groupBy": [
         {
@@ -59,16 +53,15 @@
           "type": "fill"
         }
       ],
-      "measurement": "app_name",
+      "measurement": "ApplicationName",
       "policy": "default",
-      "rawQuery": false,
       "refId": "A",
       "resultFormat": "time_series",
       "select": [
         [
           {
             "params": [
-              "monitor_key"
+              "MonitorField"
             ],
             "type": "field"
           },
@@ -78,19 +71,19 @@
           }
         ]
       ],
-      "tags": []
+      "tags": [],
+      "alias": "MonitorField"
     }
   ],
   "timeFrom": null,
   "timeShift": null,
-  "title": "monitor_key",
+  "title": "MonitorField",
   "tooltip": {
     "msResolution": false,
     "shared": true,
     "sort": 0,
     "value_type": "cumulative"
   },
-  "transparent": false,
   "type": "graph",
   "xaxis": {
     "show": true
@@ -98,7 +91,7 @@
   "yaxes": [
     {
       "format": "short",
-      "label": "",
+      "label": null,
       "logBase": 1,
       "max": null,
       "min": null,
