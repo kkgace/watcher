@@ -1,0 +1,137 @@
+<style xmlns:th="http://www.w3.org/1999/xhtml">
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Lantinghei SC', 'Open Sans', Arial, 'Hiragino Sans GB', 'Microsoft YaHei', 微软雅黑, STHeiti, 'WenQuanYi Micro Hei', SimSun, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #34495e;
+        background: #1abc9c;
+    }
+
+    .login-container {
+        width: 700px;
+        height: 600px;
+        margin: 50px auto 0;
+        background: #edeff1;
+        border-radius: 6px;
+        padding: 24px 23px 20px;
+        box-shadow: 0 0 1px rgba(10, 10, 10, 0.1);
+    }
+
+    .login-container h1 {
+        text-align: center;
+    }
+
+    .connect {
+        text-align: center;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    button {
+        color: #ffffff;
+        font-size: 16px;
+        padding: 10px 19px;
+        background: #1abc9c;
+        border-radius: 4px;
+        transition: border 0.25s linear, color 0.25s linear, background-color 0.25s linear;
+        border: none;
+        outline: none;
+        -webkit-appearance: none;
+        min-width: 94px;
+    }
+
+    select, input {
+        border: none;
+        color: #34495e;
+        background: white;
+        font-size: 15px;
+        padding: 8px 12px;
+        height: 42px;
+        width: 500px;
+        border-radius: 6px;
+        box-shadow: none;
+        transition: border 0.25s linear, color 0.25s linear, background-color 0.25s linear;
+    }
+
+    #registerForm div {
+        margin-bottom: 15px;
+    }
+
+    #registerForm div > span {
+        margin-right: 5px;
+    }
+
+    .control {
+        text-align: center;
+        margin-top: 25px;
+    }
+
+    .control button {
+        margin-left: 10px;
+    }
+</style>
+
+
+<div class="login-container">
+    <h1>监控应用注册</h1>
+
+    <div class="connect">
+        <p>watcher.baixing.com</p>
+    </div>
+
+    <form action="/api/register" method="post" id="registerForm">
+        <div>
+            <span>业务部门:</span>
+
+            <select name="organization">
+                <option th:each="org : ${orgs}"
+                        th:value="${org.getOrgId()}"
+                        th:text="${org.getOrgDesc()}"/>
+            </select>
+        </div>
+        <div>
+            <span>应用分组:</span>
+            <input type="text" name="group" placeholder="每个分组下的应用不能同名"/>
+        </div>
+        <div>
+            <span>应用名称:</span>
+            <input type="text" name="name" placeholder="英文、数字和下划线组合,不能有空格"/>
+        </div>
+        <div>
+            <span>应用地址:</span>
+            <input type="text" name="host" placeholder="应用在线上部署的地址,ip:port的形式,多个应用中间用 , 分开"/>
+        </div>
+        <div>
+            <span>获取方式:</span>
+            <input type="text" name="mode" placeholder="数据获取的方式,推送还是拉取"/>
+        </div>
+        <div>
+            <span>应用描述:</span>
+            <input type="text" name="describe" placeholder="应用描述,可以为空"/>
+        </div>
+        <div>
+            <span>联系人员:</span>
+            <input type="text" name="contact" placeholder="应用负责人,多个中间用 , 隔开"/>
+        </div>
+        <div>
+            <span>联系邮箱:</span>
+            <input type="text" name="email" placeholder="联系邮箱,多个中间用 , 隔开"/>
+        </div>
+
+        <div class="control">
+            <a href="/help.html">
+                <button type="button">使用说明</button>
+            </a>
+            <button id="submit" type="submit">注册</button>
+        </div>
+    </form>
+
+</div>
+
+

@@ -1,5 +1,6 @@
 package com.baixing.monitor.web;
 
+import com.baixing.monitor.model.AppModel;
 import com.baixing.monitor.util.OrgEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -20,14 +24,21 @@ public class PageController {
 
     @RequestMapping("/")
     public String index(Model model) {
+        List<String> appNameList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+
+            //appNameList.add(appModel);
+        }
+
+        model.addAttribute("appNameList", appNameList);
         model.addAttribute("username", "柯飞");
+
         return "index";
     }
 
     @RequestMapping("/index")
     public String indexPage(Model model) {
-        model.addAttribute("username", "柯飞");
-        return "index";
+        return index(model);
     }
 
 
@@ -44,8 +55,15 @@ public class PageController {
      * dashboard页
      */
     @RequestMapping("/dashboard")
-    public String dashboard() {
+    public String dashboard(Model model) {
+
         return "dashboard";
+    }
+
+    @RequestMapping("/register")
+    public String register(Model model) {
+        model.addAttribute("orgs", OrgEnum.values());
+        return "register";
     }
 
 

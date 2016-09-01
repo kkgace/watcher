@@ -59,21 +59,21 @@ public class APIController {
         }
 
         if (!errorMsg.isEmpty()) {
-            model.addAttribute("errorMsg", errorMsg);
-            return "redirect:/register";
+            model.addAttribute("message", errorMsg);
+            return "redirect:/index";
         } else {
 
             ResponseModel result = appService.register(appModel);
 
             if (result.getCode() == 1) {
-                return "success";
+                return "redirect:/index";
             } else if (result.getCode() == -1) {
                 errorMsg = "应用名称重复";
             } else {
                 errorMsg = "服务器错误";
             }
-            model.addAttribute("errorMsg", errorMsg);
-            return "redirect:/register";
+            model.addAttribute("message", errorMsg);
+            return "redirect:/index";
         }
     }
 

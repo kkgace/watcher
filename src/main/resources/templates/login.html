@@ -58,10 +58,12 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
     <form class="login-form" action="api/login" method="post">
         <h3 class="form-title">用户登录</h3>
         <div class="alert alert-danger display-hide">
+            <button class="close" data-close="alert" th:text="${message}"></button>
+            <span>输入您的用户名和密码</span>
+        </div>
+        <div th:if="${message} != null" class="alert alert-danger">
             <button class="close" data-close="alert"></button>
-            <span>
-				 输入您的用户名和密码
-			</span>
+            <span th:text="${message}"></span>
         </div>
         <div class="form-group">
             <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
@@ -80,8 +82,6 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
                        type="password" autocomplete="off" placeholder="密码"/>
             </div>
         </div>
-
-        <div class="form-group" th:text="${message}"></div>
 
         <div class="form-actions">
             <label class="checkbox">

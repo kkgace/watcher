@@ -106,32 +106,30 @@
 
                 <li class="start active">
                     <a href="/dashboard" id="btn-dashboard">
-                        <i class="fa fa-home"></i><span class="title"> 首页 </span><span
+                        <i class="fa fa-home"></i><span class="title"> 首页 </span>
+                    </a>
+                </li>
+
+                <li class="start active">
+                    <a href="/register" id="btn-register">
+                        <i class="fa fa-home"></i><span class="title"> 注册 </span><span
                             class="selected"> </span>
                     </a>
                 </li>
 
                 <li class="">
                     <a href="javascript:;">
-                        <i class="fa fa-gears"></i><span class="title"> 应用管理 </span><span
+                        <i class="fa fa-gears"></i><span class="title"> 我的应用 </span><span
                             class="arrow "> </span>
                     </a>
                     <ul class="sub-menu">
-                        <li>
-                            <a href="javascript:;">
-                                应用注册
+
+                        <li th:each="name: ${appNameList}">
+                            <a th:href="/api/app/${name}" th:text="${name}">
+                                我的应用
                             </a>
                         </li>
-                        <li>
-                            <a href="javascript:;">
-                                删除应用
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">
-                                修改应用
-                            </a>
-                        </li>
+
                     </ul>
                 </li>
 
@@ -141,17 +139,13 @@
                             class="arrow "> </span>
                     </a>
                     <ul class="sub-menu">
-                        <li>
-                            <a href="javascript:;">
-                                新增报警
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">
-                                删除报警
-                            </a>
-                        </li>
 
+                        <li th:each="appModel,status : ${appModelList}">
+                            <a href="javascript:;" th:field="*{appModel[__${status.index}__].position}"
+                               th:text="${appModel.name}">
+                                我的应用
+                            </a>
+                        </li>
 
                     </ul>
                 </li>
