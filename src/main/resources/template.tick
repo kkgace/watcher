@@ -1,0 +1,37 @@
+var data = stream
+    |from()
+        .measurement('%s')
+        .groupBy('%s')
+data
+    |alert()
+        .id('报警 {{ .Name }}')
+        .message('{{ .ID }} {{ .TaskName }} ={{ index .Fields "%s" }}/30s is {{ .Level }} ')
+        .details('''
+            <table border="1">
+                <tr>
+                    <th>应用</th>
+                    <th>机器</th>
+                    <th>指标</th>
+                    <th>数据</th>
+                    <th>状态</th>
+                </tr>
+                <tr>
+                    <td>{{ .Name }}</td>
+                    <td>{{ index .Tags "%s" }}</td>
+                    <td>{{ .TaskName }}</td>
+                    <td>{{ index .Fields "%s" }}</td>
+                    <td>{{ .Level }}</td>
+                </tr>
+            </table>
+            <p>是不是出问题啦，赶紧修复问题吧<p>
+            <a href="http://sales.baixing.com.cn/grafana/dashboard/db/{{ .Name }}" >{{ .Name }}</a>
+            ''')
+        //kapacitor用的是标准时间，需要-8，对应着上午9点到晚上12点
+        .crit(lambda: "%s" %s AND hour("time") >= 1 AND hour("time") <= 16)
+        //报警频率每分钟一次，直到ok
+        .stateChangesOnly(1m)
+        .slack()
+        .email('kefei@baixing.com')
+        .to('wanglongfei@baixing.com')
+        .to('dingguitao@baixing.com')
+        .to('chengyichao@baixing.com')
