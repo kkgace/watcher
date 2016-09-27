@@ -6,7 +6,7 @@ spring:
     url: jdbc:mysql://home-nuc:3306/grafana?useUnicode=true&characterEncoding=UTF-8
     username: root
     password: admin@123_KOFEE
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
 #  thymeleaf:

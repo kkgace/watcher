@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>demo</title>
+    <meta charset="utf-8"/>
+</head>
+<body>
+<h1>员工查询</h1>
+<label>请输入员工编号：</label>
+<input type="text" id="keyWord">
+<button id="search">查询</button>
+<p id="searchResult">搜索结果</p>
+
+
+<script>
+    document.getElementById("search").onclick = function () {
+        //发送Ajax请求并处理
+        var request = new XMLHttpRequest();
+        request.open("POST", "/api/ajax");
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
+        var data = document.getElementById("keyWord").value;
+        request.send(data);
+
+        //返回数据的处理
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                if (request.status === 200) {
+                    document.getElementById("searchResult").innerHTML = request.responseText;
+                } else {
+                    alert("发生错误:" + request.status)
+                }
+            }
+
+        }
+    }
+</script>
+</body>
+</html>

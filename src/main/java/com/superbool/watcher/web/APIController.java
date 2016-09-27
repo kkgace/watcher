@@ -1,6 +1,7 @@
 package com.superbool.watcher.web;
 
-import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.superbool.watcher.model.AppModel;
 import com.superbool.watcher.model.ResponseModel;
 import com.superbool.watcher.service.AppService;
@@ -93,8 +94,7 @@ public class APIController {
 
     @RequestMapping(value = "/refresh", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public String getPushMetric(@RequestBody JSONObject metricJson) {
-
+    public String getPushMetric(@RequestBody JsonObject metricJson) {
 
         return "{\"状态\":" + "}";
     }
@@ -102,7 +102,7 @@ public class APIController {
     //接收推送的指标
     @RequestMapping(value = "/push", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public ResponseModel refreshDashboard(@RequestBody JSONObject metricJson) {
+    public ResponseModel refreshDashboard(@RequestBody JsonObject metricJson) {
         logger.info("request metricJson={}", metricJson);
 
         ResponseModel result = pushDataService.writePushMetric(metricJson);
@@ -128,6 +128,15 @@ public class APIController {
             out.append(name + "=" + value + "\n");
         }
         return out.toString();
+    }
+
+    @RequestMapping(value = "/ajax", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public String ajaxTest(@RequestBody String request) {
+        logger.info("http post request={}", request);
+        JsonObject jsonObject = new Gson().fromJson(request, JsonObject.class);
+        logger.info(jsonObject.toString());
+        return "{\"code\":0,\"msg\":\"成功\"}";
     }
 
 
