@@ -3,10 +3,12 @@ package com.superbool.watcher.web;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.superbool.watcher.model.AppModel;
+import com.superbool.watcher.model.MeasurementModel;
 import com.superbool.watcher.model.ResponseModel;
 import com.superbool.watcher.service.AppService;
 import com.superbool.watcher.service.PushDataService;
 import com.superbool.watcher.service.external.GrafanaService;
+import com.superbool.watcher.service.external.InfluxDBService;
 import com.superbool.watcher.util.Monitor;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
@@ -18,6 +20,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -36,6 +40,9 @@ public class APIController {
 
     @Autowired
     private PushDataService pushDataService;
+
+    @Autowired
+    private InfluxDBService influxDBService;
 
     @Autowired
     private GrafanaService dashService;
@@ -137,6 +144,32 @@ public class APIController {
         JsonObject jsonObject = new Gson().fromJson(request, JsonObject.class);
         logger.info(jsonObject.toString());
         return "{\"code\":0,\"msg\":\"成功\"}";
+    }
+
+    @RequestMapping(value = "/influxdb", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public String influxdbTest(@RequestBody String request) {
+        logger.info("http post request={}", request);
+        //JsonObject jsonObject = new Gson().fromJson(request, JsonObject.class);
+        //logger.info(jsonObject.toString());
+
+        List<MeasurementModel> measurementList = new ArrayList<>();
+        List<String> databases = influxDBService.showDatabases();
+        for (String database : databases) {
+            if ("_internal".equals(database)) {
+                continue;
+            }
+            List<String> measuresName = influxDBService.showMeasurements(database);
+            for (String measureName : measuresName) {
+                MeasurementModel measurement = influxDBService.getMeasurement(database, measureName);
+                measurementList.add(measurement);
+            }
+        }
+
+        String result = new Gson().toJson(measurementList);
+        logger.info("result={}", request);
+
+        return result;
     }
 
 

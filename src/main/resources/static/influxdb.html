@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ztree</title>
+    <link rel="stylesheet" type="text/css" href="http://cdn.gbtags.com/ztree/3.5/zTreeStyle.css">
+    <script type="text/javascript" src="http://cdn.gbtags.com/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://cdn.gbtags.com/ztree/3.5/jquery.ztree.all-3.5.min.js"></script>
+</head>
+<body>
+
+<!-- HTML代码片段中请勿添加<body>标签 //-->
+<div id="container">
+    <ul class="ztree" id="ztree"></ul>
+    <ul class="ztree" id="ztree0"></ul>
+    <ul class="ztree" id="ztree1"></ul>
+</div>
+<p id="influxdb"></p>
+</body>
+
+<script>
+    $.post("/api/influxdb", {"func": "getNameAndTime"},
+            function (data) {
+                $("#influxdb").text(data)
+            }, "json");
+</script>
+
+<script>
+    /*Javascript代码片段*/
+    (function () {
+        var data = [];
+
+        var checkSetting =
+        {
+            check: {
+                enable: true,
+                chkboxType: {"Y": "ps", "N": "ps"}
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            view: {
+                nameIsHTML: true
+            }
+        };
+
+        var radiocheckSetting =
+        {
+            check: {
+                enable: true,
+                chkboxType: {"Y": "ps", "N": "ps"},
+                chkStyle: "radio",
+                radioType: "all" // 这是互斥的层级，可以设置"level"和"all"
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            view: {
+                nameIsHTML: true
+            }
+        };
+
+        var showSetting =
+        {
+            check: {
+                enable: false,
+                chkboxType: {"Y": "ps", "N": "ps"}
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            view: {
+                showIcon: false,
+                nameIsHTML: true
+            }
+        };
+        $.fn.zTree.init($("#ztree"), checkSetting, data);
+        $.fn.zTree.init($("#ztree0"), radiocheckSetting, data);
+        $.fn.zTree.init($("#ztree1"), showSetting, data);
+    })(jQuery);
+
+</script>
+</html>
