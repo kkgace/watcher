@@ -99,7 +99,7 @@ public class GrafanaService {
         JsonObject row = new Gson().fromJson(rowStr, JsonObject.class);
         row.addProperty("title", appModel.getName());
 
-        List<String> fieldList = influxDBService.getFieldKeys(appModel.getGroup(), appModel.getName());
+        List<String> fieldList = influxDBService.showFields(appModel.getGroup(), appModel.getName());
         JsonArray panels = joinPanelJson(appModel.getGroup(), appModel.getName(), fieldList);
 
         row.add("panels", panels);

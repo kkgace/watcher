@@ -1,13 +1,10 @@
 package com.superbool.watcher.service.dao;
 
-import com.superbool.watcher.WatcherApplication;
 import com.superbool.watcher.mapper.AppMapper;
 import com.superbool.watcher.model.AppModel;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Date;
 import java.util.List;
@@ -16,8 +13,7 @@ import java.util.UUID;
 /**
  * Created by kofee on 16/7/23.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(WatcherApplication.class)
+@SpringBootTest()
 public class AppTest {
 
     @Autowired

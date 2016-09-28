@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://home-nuc:3306/grafana?useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://home-nuc:3306/grafana?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     username: root
     password: admin@123_KOFEE
     driver-class-name: com.mysql.cj.jdbc.Driver

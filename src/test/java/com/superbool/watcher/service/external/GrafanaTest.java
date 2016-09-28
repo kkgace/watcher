@@ -2,13 +2,12 @@ package com.superbool.watcher.service.external;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.superbool.watcher.WatcherApplication;
 import com.superbool.watcher.model.AppModel;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 
@@ -16,7 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * Created by kofee on 16/8/29.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(WatcherApplication.class)
+@SpringBootTest()
 public class GrafanaTest {
     @Autowired
     GrafanaService grafanaService;

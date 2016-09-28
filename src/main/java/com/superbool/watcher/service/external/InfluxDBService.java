@@ -1,5 +1,6 @@
 package com.superbool.watcher.service.external;
 
+import com.superbool.watcher.model.MeasurementModel;
 import com.superbool.watcher.util.Monitor;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
@@ -40,8 +41,9 @@ public class InfluxDBService {
         influxDB = InfluxDBFactory.connect(url, user, password);
     }
 
-    private static final String GET_FIELD = "SHOW FIELD KEYS FROM %s";
-    private static final String GET_TAG = "SHOW TAG KEYS FROM %s";
+    private static final String SHOW_FIELD_SQL = "SHOW FIELD KEYS FROM %s";
+    private static final String SHOW_TAG_SQL = "SHOW TAG KEYS FROM %s";
+    private static final String SHOW_MEASUREMENT_SQL = "SHOW MEASUREMENTS";
 
 
     /**
@@ -81,41 +83,50 @@ public class InfluxDBService {
 
     }
 
-    public List<String> getFieldKeys(String database, String measurement) {
-
-        return getKeyList(database, measurement, GET_FIELD);
-
-    }
-
-    public List<String> getTagKeys(String database, String measurement) {
-
-        return getKeyList(database, measurement, GET_TAG);
-
+    public MeasurementModel getMeasurement(String database, String measureName) {
+        MeasurementModel measurement = new MeasurementModel(database, measureName);
+        List<String> tags = showTags(database, measureName);
+        List<String> fields = showFields(database, measureName);
+        measurement.setTags(tags);
+        measurement.setFields(fields);
+        return measurement;
     }
 
 
-    /**
-     * 获取所有的打点的key
-     *
-     * @param database    数据库名
-     * @param measurement 应用名
-     * @return
-     */
-    private List<String> getKeyList(String database, String measurement, String sql) {
-        List<String> keys = new ArrayList<>();
+    public List<String> showDatabases() {
+        return influxDB.describeDatabases();
+    }
+
+    public List<String> showMeasurements(String database) {
+        return getList(SHOW_MEASUREMENT_SQL, database);
+    }
+
+    public List<String> showTags(String database, String measurement) {
+        String sql = String.format(SHOW_TAG_SQL, measurement);
+        return getList(sql, database);
+
+    }
+
+    public List<String> showFields(String database, String measurement) {
+        String sql = String.format(SHOW_FIELD_SQL, measurement);
+        return getList(sql, database);
+    }
+
+    private List<String> getList(String sql, String database) {
+        List<String> list = new ArrayList<>();
         try {
-            Query query = new Query(String.format(sql, measurement), database);
+            Query query = new Query(sql, database);
             QueryResult result = influxDB.query(query);
+            System.out.println(result);
 
             List<QueryResult.Result> resultList = result.getResults();
             List<List<Object>> keyList = resultList.get(0).getSeries().get(0).getValues();
 
-            keyList.forEach(key -> keys.add((String) key.get(0)));
+            keyList.forEach(key -> list.add((String) key.get(0)));
 
         } catch (Exception e) {
-            logger.error("influxDB get key list error database={},measurement={},sql={}",
-                    database, measurement, sql, e);
+            logger.error("influxDB get list error! database={}, sql={}", database, sql, e);
         }
-        return keys;
+        return list;
     }
 }
