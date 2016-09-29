@@ -21,7 +21,7 @@
 <script>
     $.post("/api/influxdb", {"func": "getNameAndTime"},
             function (data) {
-                $("#influxdb").text(data)
+                $("#influxdb").text(data.data)
             }, "json");
 </script>
 

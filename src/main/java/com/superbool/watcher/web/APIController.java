@@ -169,7 +169,13 @@ public class APIController {
         String result = new Gson().toJson(measurementList);
         logger.info("result={}", request);
 
-        return result;
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("code", 1);
+        jsonObject.addProperty("meg", "成功");
+        jsonObject.addProperty("data", result);
+        logger.info(jsonObject.toString());
+
+        return jsonObject.toString();
     }
 
 
