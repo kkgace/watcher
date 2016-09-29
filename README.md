@@ -1,9 +1,9 @@
 # watcher
-watcher基于Grafana和InfluxDB和Kapacitor的监控系统后台
+watcher基于Grafana,InfluxDB以及Kapacitor的监控系统后台
 
 
 ### 工具介绍
-* **Grafan** 一个专业的图形展示工具
+* **Grafana** 一个专业的图形展示工具
 * **InfluxDB** 一个时间序列的数据库
 * **Kapacitor** 一个设置触发动作的框架应用
 
