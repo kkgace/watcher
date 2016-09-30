@@ -1,6 +1,8 @@
 package com.superbool.watcher.web;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.superbool.watcher.model.AppModel;
 import com.superbool.watcher.model.MeasurementModel;
@@ -148,10 +150,8 @@ public class APIController {
 
     @RequestMapping(value = "/influxdb", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public String influxdbTest(@RequestBody String request) {
+    public ResponseModel influxdbTest(@RequestBody String request) {
         logger.info("http post request={}", request);
-        //JsonObject jsonObject = new Gson().fromJson(request, JsonObject.class);
-        //logger.info(jsonObject.toString());
 
         List<MeasurementModel> measurementList = new ArrayList<>();
         List<String> databases = influxDBService.showDatabases();
@@ -167,15 +167,68 @@ public class APIController {
         }
 
         String result = new Gson().toJson(measurementList);
-        logger.info("result={}", request);
+        logger.info("result={}", result);
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("code", 1);
         jsonObject.addProperty("meg", "成功");
         jsonObject.addProperty("data", result);
-        logger.info(jsonObject.toString());
 
-        return jsonObject.toString();
+        ResponseModel response = new ResponseModel();
+
+        return response;
+    }
+
+    @RequestMapping(value = "/database", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseModel database() {
+
+        List<JsonObject> measurementList = new ArrayList<>();
+        List<String> databases = influxDBService.showDatabases();
+
+        for (int i = 0; i < databases.size(); i++) {
+            if ("_internal".equals(databases.get(i))) {
+                continue;
+            }
+
+            JsonObject parentObj = new JsonObject();
+            parentObj.addProperty("id", i);
+            parentObj.addProperty("pId", 0);
+            parentObj.addProperty("name", databases.get(i));
+            parentObj.addProperty("isParent", true);
+            measurementList.add(parentObj);
+
+            List<String> measuresName = influxDBService.showMeasurements(databases.get(i));
+
+            for (int j = 0; j < measuresName.size(); j++) {
+
+                //每个表不能超过1000 且总的表数也不能超过1000，否则数字重复导致ztree混乱
+                JsonObject ztreeObj = new JsonObject();
+                ztreeObj.addProperty("id", 1000 + j);
+                ztreeObj.addProperty("pId", i);
+                ztreeObj.addProperty("name", measuresName.get(j));
+                measurementList.add(ztreeObj);
+
+            }
+        }
+
+        JsonElement result = new Gson().toJsonTree(measurementList);
+        logger.info("result={}", result);
+
+        ResponseModel response = new ResponseModel(0, "成功", result.toString());
+        logger.info("response={}", response);
+        return response;
+    }
+
+    @RequestMapping(value = "/measurement", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public ResponseModel measurement(String database, String measurement) {
+        logger.info("http post database={},measurement={}", database, measurement);
+
+        MeasurementModel model = influxDBService.getMeasurement(database, measurement);
+        ResponseModel response = new ResponseModel(0, "成功", model.toString());
+        logger.info("response={}", response);
+        return response;
     }
 
 

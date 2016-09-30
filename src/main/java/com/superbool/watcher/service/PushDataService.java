@@ -48,7 +48,7 @@ public class PushDataService {
 
     //校验token并且写入InfluxDB
     public ResponseModel writePushMetric(JsonObject metricJson) {
-        ResponseModel response = new ResponseModel(-1, "服务器错误");
+        ResponseModel response = new ResponseModel(-1, "服务器错误", null);
 
         String token = metricJson.get("token").getAsString();
         String host = metricJson.get("host").getAsString();

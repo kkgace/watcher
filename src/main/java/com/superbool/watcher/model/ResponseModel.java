@@ -13,4 +13,5 @@ import lombok.NoArgsConstructor;
 public class ResponseModel {
     private int code;
     private String msg;
+    private String data;
 }

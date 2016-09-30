@@ -33,7 +33,7 @@ public class AppService {
     //注册一个应用
     public ResponseModel register(AppModel appModel) {
         long begin = System.currentTimeMillis();
-        ResponseModel response = new ResponseModel(-1, "服务器错误");
+        ResponseModel response = new ResponseModel(-1, "服务器错误", null);
         try {
             //生成一个随机的token
             String token = UUID.randomUUID().toString();
@@ -65,11 +65,11 @@ public class AppService {
 
     //有可能插入数据库成功,创建dashboard失败,所以单独抽出来
     public ResponseModel refreshDashboard(AppModel appModel) {
-        ResponseModel response = new ResponseModel(-1, "服务器错误");
+        ResponseModel response = new ResponseModel(-1, "服务器错误", null);
         //数据库插入成功,创建dashboard
         String result = grafanaService.crateDashboard(appModel);
 
-        JsonObject resultJson = new Gson().fromJson(result,JsonObject.class);
+        JsonObject resultJson = new Gson().fromJson(result, JsonObject.class);
 
         if (resultJson.get("status").equals("success")) {
             PullDataService.addApp(appModel);
@@ -84,13 +84,13 @@ public class AppService {
 
     //更新应用的信息
     public ResponseModel update(AppModel appModel) {
-        ResponseModel response = new ResponseModel(-1, "服务器错误");
+        ResponseModel response = new ResponseModel(-1, "服务器错误", null);
         return response;
     }
 
     //查询某个应用信息
     public AppModel getByGroupAndName(String group, String name) {
-        ResponseModel response = new ResponseModel(-1, "服务器错误");
+        ResponseModel response = new ResponseModel(-1, "服务器错误", null);
         return null;
     }
 
@@ -119,7 +119,7 @@ public class AppService {
 
     //删除一个应用  根据token 或者 group 和 name
     public ResponseModel delete(JsonObject appInfo) {
-        ResponseModel response = new ResponseModel(-1, "服务器错误");
+        ResponseModel response = new ResponseModel(-1, "服务器错误", null);
         return response;
     }
 

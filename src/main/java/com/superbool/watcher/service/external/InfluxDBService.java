@@ -120,9 +120,11 @@ public class InfluxDBService {
             System.out.println(result);
 
             List<QueryResult.Result> resultList = result.getResults();
-            List<List<Object>> keyList = resultList.get(0).getSeries().get(0).getValues();
 
-            keyList.forEach(key -> list.add((String) key.get(0)));
+            if (resultList.get(0).getSeries() != null) {
+                List<List<Object>> keyList = resultList.get(0).getSeries().get(0).getValues();
+                keyList.forEach(key -> list.add((String) key.get(0)));
+            }
 
         } catch (Exception e) {
             logger.error("influxDB get list error! database={}, sql={}", database, sql, e);
