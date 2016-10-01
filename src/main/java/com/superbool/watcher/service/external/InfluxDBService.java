@@ -3,17 +3,15 @@ package com.superbool.watcher.service.external;
 import com.superbool.watcher.model.MeasurementModel;
 import com.superbool.watcher.util.Monitor;
 import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -24,22 +22,8 @@ import java.util.concurrent.TimeUnit;
 public class InfluxDBService {
     private static final Logger logger = LoggerFactory.getLogger(InfluxDBService.class);
 
+    @Autowired
     private InfluxDB influxDB;
-
-    @Value(value = "${influxdb.url}")
-    private String url;
-
-    @Value(value = "${influxdb.user}")
-    private String user;
-
-    @Value(value = "${influxdb.password}")
-    private String password;
-
-
-    @PostConstruct
-    public void init() {
-        influxDB = InfluxDBFactory.connect(url, user, password);
-    }
 
     private static final String SHOW_FIELD_SQL = "SHOW FIELD KEYS FROM %s";
     private static final String SHOW_TAG_SQL = "SHOW TAG KEYS FROM %s";
@@ -83,6 +67,9 @@ public class InfluxDBService {
 
     }
 
+    /**
+     * 获取一个measurement完整的信息
+     */
     public MeasurementModel getMeasurement(String database, String measureName) {
         MeasurementModel measurement = new MeasurementModel(database, measureName);
         List<String> tags = showTags(database, measureName);

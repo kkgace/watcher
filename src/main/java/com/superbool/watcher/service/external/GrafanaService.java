@@ -63,7 +63,7 @@ public class GrafanaService {
     //创建一个dashboard
     public String crateDashboard(AppModel appModel) {
         //生成grafana的json数据
-        JsonObject grafana = joinDashJson(appModel);
+        JsonObject grafana = null;
         //通过api接口创建dashboard
         String result = HttpUtil.post(grafanaUrl + API_DASHBOARD, grafana.toString(), BEARER + apiKey);
 
@@ -76,12 +76,26 @@ public class GrafanaService {
     }
 
 
+    /**
+     * @param datasource  grafana中配置的数据源
+     * @param database    influxdb中的数据库
+     * @param measurement influxdb中的指标名
+     * @return
+     */
+    public String createDashboard(String datasource, String database, String measurement) {
+        JsonObject grafana = joinDashJson(datasource, database, measurement);
+        String result = HttpUtil.post(grafanaUrl + API_DASHBOARD, grafana.toString(), BEARER + apiKey);
+        return result;
+
+    }
+
+
     //生成grafana 的json格式
-    private JsonObject joinDashJson(AppModel appModel) {
+    private JsonObject joinDashJson(String datasource, String database, String measurement) {
 
         JsonObject dashJson = new Gson().fromJson(dashboardStr, JsonObject.class);
-        dashJson.addProperty("title", appModel.getName());
-        dashJson.addProperty("description", appModel.getDescribe());
+        dashJson.addProperty("title", measurement);
+        dashJson.addProperty("description", measurement);
 
         JsonObject linkJson = new Gson().fromJson(linkStr, JsonObject.class);
         String ip = "";
@@ -97,10 +111,10 @@ public class GrafanaService {
         links.add(linkJson);
 
         JsonObject row = new Gson().fromJson(rowStr, JsonObject.class);
-        row.addProperty("title", appModel.getName());
+        row.addProperty("title", measurement);
 
-        List<String> fieldList = influxDBService.showFields(appModel.getGroup(), appModel.getName());
-        JsonArray panels = joinPanelJson(appModel.getGroup(), appModel.getName(), fieldList);
+        List<String> fieldList = influxDBService.showFields(database, measurement);
+        JsonArray panels = joinPanelJson(datasource, measurement, fieldList);
 
         row.add("panels", panels);
 
@@ -117,7 +131,7 @@ public class GrafanaService {
         return grafana;
     }
 
-    private JsonArray joinPanelJson(String database, String title, List<String> fieldList) {
+    private JsonArray joinPanelJson(String datasource, String title, List<String> fieldList) {
         JsonArray panels = new JsonArray();
         int id = 1;
         for (String key : fieldList) {
@@ -125,8 +139,8 @@ public class GrafanaService {
             panel = panel.replace("ApplicationName", title);
             panel = panel.replace("MonitorField", key);
 
-            JsonObject panelJson = new Gson().fromJson(panel,JsonObject.class);
-            panelJson.addProperty("datasource", database);
+            JsonObject panelJson = new Gson().fromJson(panel, JsonObject.class);
+            panelJson.addProperty("datasource", datasource);
             panelJson.addProperty("id", id++);
             //添加一个图
             panels.add(panelJson);

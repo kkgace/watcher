@@ -1,7 +1,6 @@
 package com.superbool.watcher.model;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

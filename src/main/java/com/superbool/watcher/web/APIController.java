@@ -47,7 +47,7 @@ public class APIController {
     private InfluxDBService influxDBService;
 
     @Autowired
-    private GrafanaService dashService;
+    private GrafanaService grafanaService;
 
     //应用注册
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -226,7 +226,18 @@ public class APIController {
         logger.info("http post database={},measurement={}", database, measurement);
 
         MeasurementModel model = influxDBService.getMeasurement(database, measurement);
-        ResponseModel response = new ResponseModel(0, "成功", model.toString());
+        ResponseModel response = new ResponseModel(0, "成功", model.toJsonStr());
+        logger.info("response={}", response);
+        return response;
+    }
+
+    @RequestMapping(value = "/dashboard", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public ResponseModel dashboard(String database, String measurement) {
+        logger.info("http post database={},measurement={}", database, measurement);
+
+        String result = grafanaService.createDashboard("nuc-telegraf", database, measurement);
+        ResponseModel response = new ResponseModel(0, "成功", result);
         logger.info("response={}", response);
         return response;
     }

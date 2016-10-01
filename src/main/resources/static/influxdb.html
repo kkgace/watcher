@@ -18,11 +18,16 @@
 <p id="database"></p>
 <p id="echoActive"></p>
 <p id="measurement"></p>
+<p id="dashboard"></p>
+<button id="createDashboard">生成监控</button>
 </body>
 
 <script>
 
+    var currentTreeNode;
+
     function zTreeOnClick(event, treeId, treeNode) {
+        currentTreeNode = treeNode;
 
         $("#echoActive").text("节点名称：" + treeNode.name + "----" +
                 "节点的id值：" + treeNode.id + "----" +
@@ -32,7 +37,7 @@
         $.post("/api/measurement",
                 {"database": treeNode.getParentNode().name, "measurement": treeNode.name},
                 function (data) {
-                    $("#measurement").text(JSON.stringify(data));
+                    $("#measurement").text(data.data);
                 }, "json");
     }
     ;
@@ -49,10 +54,26 @@
     $(document).ready(function () {
         $.get("/api/database",
                 function (data) {
-                    $("#database").text(data.data);
+                    //$("#database").text(data.data);
                     var obj = JSON.parse(data.data);
                     $.fn.zTree.init($("#ztree"), setting, obj);
                 }, "json");
+
+
+        $("#createDashboard").bind("click",
+                function () {
+                    if (currentTreeNode == null) {
+                        alert('请先选择一个measurement');
+                    }
+                    else {
+                        $.post("/api/dashboard",
+                                {"database": currentTreeNode.getParentNode().name, "measurement": currentTreeNode.name},
+                                function (data) {
+                                    $("#dashboard").text(data.data);
+                                }, "json");
+                    }
+
+                });
     })
 
 
