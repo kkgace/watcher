@@ -83,6 +83,7 @@ public class GrafanaService {
      * @return
      */
     public String createDashboard(String datasource, String database, String measurement) {
+
         JsonObject grafana = joinDashJson(datasource, database, measurement);
         String result = HttpUtil.post(grafanaUrl + API_DASHBOARD, grafana.toString(), BEARER + apiKey);
         return result;

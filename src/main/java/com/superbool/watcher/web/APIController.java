@@ -179,9 +179,9 @@ public class APIController {
         return response;
     }
 
-    @RequestMapping(value = "/database", method = RequestMethod.GET)
+    @RequestMapping(value = "/application", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseModel database() {
+    public ResponseModel application() {
 
         List<JsonObject> measurementList = new ArrayList<>();
         List<String> databases = influxDBService.showDatabases();
@@ -237,6 +237,16 @@ public class APIController {
         logger.info("http post database={},measurement={}", database, measurement);
 
         String result = grafanaService.createDashboard("nuc-telegraf", database, measurement);
+        ResponseModel response = new ResponseModel(0, "成功", result);
+        logger.info("response={}", response);
+        return response;
+    }
+
+    @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseModel getDashboard(String measurement) {
+        logger.info("http get measurement={}", measurement);
+        String result = grafanaService.getDashboard(measurement);
         ResponseModel response = new ResponseModel(0, "成功", result);
         logger.info("response={}", response);
         return response;

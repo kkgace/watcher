@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报警设置</title>
+
+    <link rel="stylesheet" type="text/css" href="http://cdn.gbtags.com/ztree/3.5/zTreeStyle.css">
+    <script type="text/javascript" src="http://cdn.gbtags.com/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://cdn.gbtags.com/ztree/3.5/jquery.ztree.all-3.5.min.js"></script>
+
+    <style>
+        #app-tree {
+            line-height: 30px;
+            background-color: #eeeeee;
+            height: 1000px;
+            width: 200px;
+            float: left;
+            padding: 5px;
+        }
+
+        #section {
+            width: 600px;
+            float: left;
+            padding: 10px;
+        }
+    </style>
+
+
+</head>
+<body>
+
+
+<div id="app-tree">
+    <p>所有应用</p>
+    <ul class="ztree" id="application"></ul>
+</div>
+
+<div id="section">
+    <p>应用详情：</p>
+    <p id="database"></p>
+    <button id="createDashboard" style="display: none">生成监控</button>
+    <p id="tag"></p>
+    <ul id="field"></ul>
+    <p id="currentNode"></p>
+    <p id="temp"></p>
+</div>
+
+</body>
+
+<script>
+
+    $(document).ready(function () {
+
+        //获取应用数据放到左边的ztree上
+        $.get("/api/application",
+                function (data) {
+                    var obj = JSON.parse(data.data);
+                    $.fn.zTree.init($("#application"), setting, obj);
+                }, "json");
+
+
+        var currentTreeNode;
+
+        function zTreeOnClick(event, treeId, treeNode) {
+            //获取当前选中的节点
+            currentTreeNode = treeNode;
+
+            if (treeNode.getParentNode() != null) {
+                $("#currentNode").text(
+                        "节点的id值：" + treeNode.id + " ----" +
+                        "节点名称：" + treeNode.name + " ----" +
+                        "父节点名称：" + treeNode.getParentNode().name
+                );
+
+                $("#database").text(treeNode.getParentNode().name + " -> " + treeNode.name);
+
+                $.post("/api/measurement",
+                        {"database": treeNode.getParentNode().name, "measurement": treeNode.name},
+                        function (data) {
+                            var obj = JSON.parse(data.data);
+                            $("#tag").text("标签：" + obj.tags);
+
+                            $("#field").empty();
+                            $.each(obj.fields, function (i, val) {
+                                $("#field").append("<li><a href='#'>" + val + "</a></li><br>");
+                            })
+                        }, "json");
+
+                $.get("/api/dashboard",
+                        {"measurement": treeNode.name},
+                        function (data) {
+                            var obj = JSON.parse(data.data);
+                            $("#createDashboard").show();
+                            if (obj.meta != null) {
+                                $("#createDashboard").text("刷新监控")
+                            } else {
+                                $("#createDashboard").text("生成监控")
+                            }
+
+                        }, "json");
+
+            } else {
+                $("#currentNode").empty();
+                $("#database").empty();
+                $("#tag").empty();
+                $("#field").empty();
+                $("#createDashboard").hide();
+            }
+        };
+
+        var setting = {
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {onClick: zTreeOnClick}
+        };
+
+
+        $("#createDashboard").bind("click",
+                function () {
+                    if (currentTreeNode == null) {
+                        alert('请先选择一个measurement');
+                    }
+                    else {
+                        $.post("/api/dashboard",
+                                {"database": currentTreeNode.getParentNode().name, "measurement": currentTreeNode.name},
+                                function (data) {
+                                    alert(data.data);
+                                }, "json");
+                    }
+
+                });
+
+        $("#field").on("click", "li",
+                function () {
+                    $("#temp").text($(this).text());
+                }
+        );
+    })
+
+
+</script>
+</html>
