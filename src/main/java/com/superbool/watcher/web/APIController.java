@@ -236,7 +236,7 @@ public class APIController {
     public ResponseModel dashboard(String database, String measurement) {
         logger.info("http post database={},measurement={}", database, measurement);
 
-        String result = grafanaService.createDashboard("nuc-telegraf", database, measurement);
+        String result = grafanaService.createDashboard(database, database, measurement);
         ResponseModel response = new ResponseModel(0, "成功", result);
         logger.info("response={}", response);
         return response;
